@@ -9,7 +9,6 @@ ROL_CHOICES = [
 ]
 
 class Perfil(models.Model):
-    activo = models.BooleanField(default=True)
     rol = models.CharField(
         max_length=22,
         choices=ROL_CHOICES,

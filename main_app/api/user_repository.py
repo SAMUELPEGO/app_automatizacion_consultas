@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from main_app.models import Usuario, Perfil
+from django.db import transaction
 
 @require_http_methods(["GET"])
 def obtener_usuarios(request):
@@ -21,19 +22,17 @@ def crear_usuario(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         rol = request.POST.get('rol')
-        
 
         if not all([username, password, rol]):
             return JsonResponse({'success': False, 'error': 'Faltan datos obligatorios.'}, status=400)
 
-        perfil = Perfil.objects.create(
-            rol=rol
-        )
-        usuario = Usuario.objects.create_user(
-            username=username,
-            password=password,
-            perfil=perfil
-        )
+        with transaction.atomic():
+            perfil = Perfil.objects.create(rol=rol)
+            usuario = Usuario.objects.create_user(
+                username=username,
+                password=password,
+                perfil=perfil
+            )
         return JsonResponse({'success': True, 'message': "usuario creado correctamente"})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
