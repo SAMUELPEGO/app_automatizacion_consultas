@@ -25,9 +25,10 @@
           <table id="usuariosTabla">
             <thead>
               <tr>
+                <th>#</th>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Email</th>
+                <th>Rol</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -37,13 +38,11 @@
       </main>
     </div>
 
-    <!-- Modal -->
     <div id="modal" class="modal">
       <div class="modal-content">
         <span id="modalCerrar">&times;</span>
         <h2 id="modalTitulo">Crear Usuario</h2>
         <form id="formularioUsuario">
-          <input type="hidden" id="usuarioId" />
           <label for="username">Nombre:</label>
           <input type="text" id="username" name="username" required />
 
@@ -51,8 +50,7 @@
           <input type="password" id="password" name="password" required />
 
           <label for="rol">Rol:</label>
-          <select id="rol" name="rol" required>
-            <option value="">Seleccione un rol</option>
+          <select id="modalEditRol" name="rol" required>
             <option value="guardia">Guardia</option>
             <option value="especialista">Especialista</option>
             <option value="especialista_principal">
@@ -63,6 +61,32 @@
         </form>
       </div>
     </div>
+
+
+
+    <div id="modalEdit" class="modal">
+      <div class="modal-content">
+        <span id="modalCerrarEdit">&times;</span>
+        <h2 id="modalTitulo">Eliminar Usuario</h2>
+        <form id="formularioUsuarioEdit">
+          <label for="username">Nombre:</label>
+          <input type="text" id="modalEditUsername" name="username" required />
+          <label for="password">Password:</label>
+          <input type="password" id="modalEditPassword" name="password" required />
+
+          <label for="rol">Rol:</label>
+          <select id="rol" name="rol" required>
+            <option value="guardia">Guardia</option>
+            <option value="especialista">Especialista</option>
+            <option value="especialista_principal">
+              Especialista Principal
+            </option>
+          </select>
+          <button type="submit">Guardar</button>
+        </form>
+      </div>
+    </div>
+
 
     <script src="static/js/especialista_principal_page.js"></script>
   </body>

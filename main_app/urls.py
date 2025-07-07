@@ -8,8 +8,8 @@ urlpatterns = [
        path('especialista_principal_page', views.especialista_principal_page, name='especialista_principal_page'),
        path('iniciar_sesion', auth.api_login, name='iniciar_sesion'),
        path("crear_usuario",user_repository.crear_usuario,name="crear_usuario"),
-       path("eliminar_usuario",user_repository.crear_usuario,name="eliminar_usuario"),
-       path("actualizar_usuario",user_repository.crear_usuario,name="actualizar_usuario"),
-       path("obtener_usuarios",user_repository.crear_usuario,name="crear_usuario")
+       path("eliminar_usuario",user_repository.eliminar_usuario,name="eliminar_usuario"),
+       path("actualizar_usuario",user_repository.actualizar_usuario,name="actualizar_usuario"),
+       path("obtener_usuarios",user_repository.obtener_usuarios,name="crear_usuario")
 
 ]

@@ -1,31 +1,37 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const tabla = document.getElementById('usuariosTabla').querySelector('tbody');
   const modal = document.getElementById('modal');
+  const modalEdit = document.getElementById('modalEdit');
   const btnCrear = document.getElementById('btnCrearUsuario');
   const btnCerrarModal = document.getElementById('modalCerrar');
+  const btnCerrarModalEdit = document.getElementById('modalCerrarEdit');
   const formulario = document.getElementById('formularioUsuario');
-  const tituloModal = document.getElementById('modalTitulo');
-  const inputId = document.getElementById('usuarioId');
-  const inputNombre = document.getElementById('nombre');
-  const inputEmail = document.getElementById('email');
+  const formularioEdit = document.getElementById('formularioUsuarioEdit');
+  const inputNombre = document.getElementById('username');
+  const inputPassword = document.getElementById('password');
+  const modalEditInputNombre = document.getElementById('modalEditUsername');
+  const modalEditInputPassword = document.getElementById('modalEditPassword');
 
-  let usuarios = [
-    { id: 1, nombre: 'Ana López', email: 'ana@example.com' },
-    { id: 2, nombre: 'Carlos Pérez', email: 'carlos@example.com' }
-  ];
+  async function renderizarTabla() {
+    const get_usuarios = await fetch("/obtener_usuarios")
+    const data = await get_usuarios.json()
+    if (!data.usuarios?.length) {
 
-  function renderizarTabla() {
+      tabla.innerHTML = '';
+    }
     tabla.innerHTML = '';
-    usuarios.forEach(usuario => {
+    console.log(data)
+    data.usuarios.forEach((usuario, index) => {
       const tr = document.createElement('tr');
 
       tr.innerHTML = `
-        <td>${usuario.id}</td>
-        <td>${usuario.nombre}</td>
-        <td>${usuario.email}</td>
+       <td>${index + 1}</td>
+        <td title="${usuario.id}">${usuario.id.slice(0, 8)}...</td>
+        <td>${usuario.username}</td>
+        <td>${usuario.rol}</td>
         <td>
-          <button class="btn-editar" onclick="editarUsuario(${usuario.id})">Editar</button>
-          <button class="btn-eliminar" onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
+          <button class="btn-editar"  onclick="editarUsuario('${usuario.id}')">Editar</button>
+          <button class="btn-eliminar" onclick="eliminarUsuario('${usuario.id}')">Eliminar</button>
         </td>
       `;
 
@@ -34,28 +40,28 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.editarUsuario = (id) => {
-    const usuario = usuarios.find(u => u.id === id);
-    if (usuario) {
-      inputId.value = usuario.id;
-      inputNombre.value = usuario.nombre;
-      inputEmail.value = usuario.email;
-      tituloModal.textContent = 'Editar Usuario';
-      modal.style.display = 'block';
-    }
+    modalEditInputNombre.value = '';
+    modalEditInputPassword.value = '';
+    modalEdit.style.display = 'block';
+    modalEdit.setAttribute('data-usuario-id', id);
   };
 
   window.eliminarUsuario = (id) => {
     if (confirm('¿Estás seguro de eliminar este usuario?')) {
-      usuarios = usuarios.filter(u => u.id !== id);
+      const formData = new FormData
+      formData.append('usuario_id', id);
+      fetch(`/eliminar_usuario`, {
+        method: 'POST',
+        body: formData
+      })
+      alert('Usuario eliminado correctamente');
       renderizarTabla();
     }
   };
 
   btnCrear.addEventListener('click', () => {
-    inputId.value = '';
     inputNombre.value = '';
-    inputEmail.value = '';
-    tituloModal.textContent = 'Crear Usuario';
+    inputPassword.value = '';
     modal.style.display = 'block';
   });
 
@@ -63,29 +69,64 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.style.display = 'none';
   });
 
-  formulario.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const id = parseInt(inputId.value);
-    const nombre = inputNombre.value.trim();
-    const email = inputEmail.value.trim();
-
-    if (!nombre || !email) return alert('Por favor, completa todos los campos.');
-
-    if (id) {
-      // Editar
-      const usuario = usuarios.find(u => u.id === id);
-      usuario.nombre = nombre;
-      usuario.email = email;
-    } else {
-      // Crear
-      const nuevoId = usuarios.length ? Math.max(...usuarios.map(u => u.id)) + 1 : 1;
-      usuarios.push({ id: nuevoId, nombre, email });
-    }
-
-    renderizarTabla();
-    modal.style.display = 'none';
+  btnCerrarModalEdit.addEventListener('click', () => {
+    modalEdit.style.display = 'none';
   });
 
-  renderizarTabla();
+  formulario.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(formulario);
+
+    try {
+      const response = await fetch('/crear_usuario', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        alert('Usuario creado correctamente');
+        await renderizarTabla();
+        modal.style.display = 'none';
+        formulario.reset();
+      } else {
+        alert(data.error || 'Error al crear usuario');
+      }
+    } catch (error) {
+      alert('Error en la solicitud');
+    }
+  });
+
+
+  formularioEdit.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const usuarioId = modalEdit.getAttribute('data-usuario-id');
+    const formData = new FormData(formularioEdit);
+    formData.append('usuario_id', usuarioId);
+
+    try {
+      const response = await fetch('/actualizar_usuario', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        alert('Usuario actualizado correctamente');
+        await renderizarTabla();
+        modal.style.display = 'none';
+        formulario.reset();
+      } else {
+        alert(data.error || 'Error al actualizar usuario');
+      }
+    } catch (error) {
+      alert('Error en la solicitud');
+    }
+  });
+
+  await renderizarTabla();
 });
+
+

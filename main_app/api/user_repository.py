@@ -10,6 +10,7 @@ def obtener_usuarios(request):
     data = []
     for usuario in usuarios:
         data.append({
+            "id":usuario.id,
             'username': usuario.username,
             'rol': usuario.perfil.rol if usuario.perfil else None,
         })
@@ -31,7 +32,8 @@ def crear_usuario(request):
             usuario = Usuario.objects.create_user(
                 username=username,
                 password=password,
-                perfil=perfil
+                perfil=perfil,
+
             )
         return JsonResponse({'success': True, 'message': "usuario creado correctamente"})
     except Exception as e:
@@ -39,43 +41,42 @@ def crear_usuario(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def actualizar_usuario(request, usuario_id):
+def actualizar_usuario(request):
     try:
+        usuario_id = request.POST.get('usuario_id')
+        if not usuario_id:
+            return JsonResponse({'success': False, 'error': 'ID de usuario es requerido.'}, status=400)
         usuario = Usuario.objects.get(id=usuario_id)
         username = request.POST.get('username')
-        email = request.POST.get('email')
         password = request.POST.get('password')
         rol = request.POST.get('rol')
-        nombre_perfil = request.POST.get('nombre_perfil')
-        descripcion = request.POST.get('descripcion')
-
         if username:
             usuario.username = username
-        if email:
-            usuario.email = email
         if password:
             usuario.set_password(password)
-        usuario.save()
-
-        if usuario.perfil:
-            if rol:
+        if rol:
+            if usuario.perfil:
                 usuario.perfil.rol = rol
-            if nombre_perfil:
-                usuario.perfil.nombre = nombre_perfil
-            if descripcion is not None:
-                usuario.perfil.descripcion = descripcion
-            usuario.perfil.save()
+                usuario.perfil.save()
+            else:
+                usuario.perfil = Perfil.objects.create(rol=rol)
+        usuario.save()
 
         return JsonResponse({'success': True})
     except Usuario.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Usuario no encontrado.'}, status=404)
     except Exception as e:
+        if str(e) == 'UNIQUE constraint failed: main_app_usuario.username':
+            return JsonResponse({'success': False, 'error': 'El nombre de usuario ya existe.'}, status=400)
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def eliminar_usuario(request, usuario_id):
+def eliminar_usuario(request):
     try:
+        usuario_id = request.POST.get('usuario_id')
+        if not usuario_id:
+            return JsonResponse({'success': False, 'error': 'ID de usuario es requerido.'}, status=400)
         usuario = Usuario.objects.get(id=usuario_id)
         if usuario.perfil:
             usuario.perfil.delete()
