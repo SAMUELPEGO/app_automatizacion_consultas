@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Procedimientos</title>
+  <link rel="stylesheet" href="static/css/especialista_page.css" />
+  <script src="static/js/especialista_page.js" defer></script>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Menú</h2>
+      <ul>
+        <li>Procedimientos</li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-bar">
+        <h1>Panel de Procedimientos</h1>
+        <button id="btnCrearProcedimiento">Crear Procedimiento</button>
+      </header>
+
+      <section class="card-section">
+        <!-- Tarjetas dinámicas -->
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="modalCerrar">&times;</span>
+      <h2 id="modalTitulo">Crear Procedimiento</h2>
+      <form id="formularioProcedimiento">
+        <input type="hidden" id="procedimientoId" />
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required />
+
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" rows="4" required></textarea>
+
+        <label for="archivo">Archivo Adjunto:</label>
+        <input type="file" id="archivo" accept=".pdf,.docx,.xlsx" />
+
+        <button type="submit">Guardar</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

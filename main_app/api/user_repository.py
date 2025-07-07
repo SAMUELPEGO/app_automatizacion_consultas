@@ -1,9 +1,11 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from main_app.models import Usuario, Perfil
 from django.db import transaction
 
+@login_required
 @require_http_methods(["GET"])
 def obtener_usuarios(request):
     usuarios = Usuario.objects.all()
@@ -16,6 +18,7 @@ def obtener_usuarios(request):
         })
     return JsonResponse({'success': True, 'usuarios': data})
 
+@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def crear_usuario(request):
@@ -37,8 +40,12 @@ def crear_usuario(request):
             )
         return JsonResponse({'success': True, 'message': "usuario creado correctamente"})
     except Exception as e:
-        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+         if 'UNIQUE constraint failed' in str(e):
+            return JsonResponse({'success': False, 'error': 'El nombre de usuario ya existe.'}, status=400)
+        
+         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
+@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def actualizar_usuario(request):
@@ -66,10 +73,11 @@ def actualizar_usuario(request):
     except Usuario.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Usuario no encontrado.'}, status=404)
     except Exception as e:
-        if str(e) == 'UNIQUE constraint failed: main_app_usuario.username':
+        if 'UNIQUE constraint failed' in str(e):
             return JsonResponse({'success': False, 'error': 'El nombre de usuario ya existe.'}, status=400)
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
+@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def eliminar_usuario(request):

@@ -27,8 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success === true) {
                     responseMessage.textContent = 'Redireccionando...';
                     responseMessage.style.color = 'green';
-
-                    window.location.href = '/especialista_principal_page';
+                    window.location.href = data.redirect_url
 
                 } else {
                     responseMessage.textContent = 'Credenciales incorrectas o error del servidor.';

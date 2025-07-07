@@ -1,6 +1,9 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate,login
+from django.shortcuts import redirect
+from django.urls import reverse
+
 
 
 @require_http_methods(["POST"])
@@ -18,11 +21,19 @@ def api_login(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
+            if user.perfil.rol == 'especialista_principal':
+               redirect_url = reverse('especialista_principal_page')
+            elif user.perfil.rol == 'especialista':
+               redirect_url = reverse('especialista_page')
+            # elif user.perfil.rol == 'guardia':
+            #    redirect_url = reverse('guardia_page')
             return JsonResponse({
                 'success': True,
                 'message': 'Login exitoso',
-                'usuario': user.username
+                'usuario': user.username,
+                'redirect_url': redirect_url
             })
+        
         else:
             return JsonResponse({
                 'success': False,

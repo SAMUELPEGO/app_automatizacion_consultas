@@ -1,0 +1,230 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+}
+
+.dashboard {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #000066;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin: 15px 0;
+  cursor: pointer;
+  color: #3399cc;
+  font-weight: bold;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #eef6ff;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.top-bar h1 {
+  color: #000066;
+}
+
+.top-bar button {
+  background-color: #3399cc;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.top-bar button:hover {
+  background-color: #267fb3;
+}
+
+.card-section {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 102, 0.1);
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card .nombre {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #000066;
+}
+
+.descripcion-container {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 10px;
+  background-color: #f9f9f9;
+}
+
+.accordion-header {
+  background-color: #e6f0ff;
+  color: #000066;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.accordion-header:hover {
+  background-color: #d4ebff;
+}
+
+.accordion-header .icon {
+  transition: transform 0.3s ease;
+  font-size: 12px;
+}
+
+.descripcion {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 15px;
+  background-color: white;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.descripcion.expanded {
+  max-height: 200px;
+  padding: 10px 15px;
+}
+
+.card .acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.card .acciones button {
+  margin-left: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-ver-archivo,
+.btn-editar {
+  background-color: #3399cc;
+  color: white;
+}
+
+.btn-eliminar {
+  background-color: red;
+  color: white;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 102, 0.6);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+  color: #000066;
+}
+
+.modal-content span {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #000066;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #000066;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal-content button {
+  width: 100%;
+  background-color: #3399cc;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #267fb3;
+}
