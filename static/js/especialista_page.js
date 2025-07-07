@@ -120,13 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!nombre || !descripcion) return alert('Por favor, completa todos los campos.');
 
     if (id) {
-      // Editar
       const procedimiento = procedimientos.find(p => p.id === id);
       procedimiento.nombre = nombre;
       procedimiento.descripcion = descripcion;
       procedimiento.archivo = archivo;
     } else {
-      // Crear
       const nuevoId = procedimientos.length ? Math.max(...procedimientos.map(p => p.id)) + 1 : 1;
       procedimientos.push({ id: nuevoId, nombre, descripcion, archivo });
     }
