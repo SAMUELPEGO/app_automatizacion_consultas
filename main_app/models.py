@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import uuid
 
 ROL_CHOICES = [
     ('guardia', 'Guardia'),
@@ -8,8 +9,6 @@ ROL_CHOICES = [
 ]
 
 class Perfil(models.Model):
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField(blank=True)
     activo = models.BooleanField(default=True)
     rol = models.CharField(
         max_length=22,
@@ -21,6 +20,7 @@ class Perfil(models.Model):
         return self.nombre
 
 class Usuario(AbstractUser):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True,primary_key=True)
     perfil = models.OneToOneField(
         Perfil,
         on_delete=models.CASCADE,

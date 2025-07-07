@@ -1,9 +1,10 @@
 from django.shortcuts import render
 
 
-def Home(request):
-    nombre = request.user.username
+def inicio_sesion(request):
 
-    return render(request,"home.html",{
-     "nombre":nombre
-    })
+    return render(request,"inicio_sesion.html")
+
+
+def especialista_principal_page(request):
+    return render(request,"especialista_principal_page.html")

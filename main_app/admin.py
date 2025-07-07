@@ -4,9 +4,9 @@ from .models import Usuario, Perfil, Procedimiento, Consulta
 
 @admin.register(Perfil)
 class PerfilAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'descripcion', 'activo', 'rol')
-    list_filter = ('activo', 'rol')
-    search_fields = ('nombre',)
+    list_display = ('rol',)
+    list_filter = ( 'rol',)
+    search_fields = ('rol',)
 
 @admin.register(Usuario)
 class UsuarioPersonalizadoAdmin(UserAdmin):
