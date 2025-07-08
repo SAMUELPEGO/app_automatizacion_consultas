@@ -38,7 +38,7 @@ def api_login(request):
             return JsonResponse({
                 'success': False,
                 'error': 'Credenciales inválidas.'
-            }, status=401)
+            })
     except Exception as e:
         return JsonResponse({
             'success': False,

@@ -18,8 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
             .then(response => {
+
                 if (!response.ok) {
                     throw new Error('Error en la conexión');
+
                 }
                 return response.json();
             })
@@ -30,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.location.href = data.redirect_url
 
                 } else {
-                    responseMessage.textContent = 'Credenciales incorrectas o error del servidor.';
+                    responseMessage.textContent = 'Credenciales incorrectas';
                     responseMessage.style.color = 'red';
                 }
             })

@@ -88,11 +88,13 @@ body {
 }
 
 .card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 102, 0.1);
+    background: linear-gradient(to bottom, #ffffff, #f9f9fb);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 102, 0.15);
     padding: 20px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 4px solid #3399cc;
+    overflow: hidden;
 }
 
 .card:hover {
