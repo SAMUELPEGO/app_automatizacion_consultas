@@ -25,8 +25,8 @@ def api_login(request):
                redirect_url = reverse('especialista_principal_page')
             elif user.perfil.rol == 'especialista':
                redirect_url = reverse('especialista_page')
-            # elif user.perfil.rol == 'guardia':
-            #    redirect_url = reverse('guardia_page')
+            elif user.perfil.rol == 'guardia':
+               redirect_url = reverse('guardia_page')
             return JsonResponse({
                 'success': True,
                 'message': 'Login exitoso',

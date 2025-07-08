@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const inputNombreEdit = document.getElementById('modalEditNombre');
   const inputDescripcionEdit = document.getElementById('modalEditDescripcion');
   const inputFileEdit = document.getElementById('modalEditArchivo');
+  const details = document.querySelectorAll('details');
+
 
 
 
@@ -29,17 +31,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     data.procedimientos.forEach(procedimiento => {
       const card = document.createElement('div');
       card.classList.add('card');
-
       card.innerHTML = `
         <h3 class="nombre">${procedimiento.nombre}</h3>
         <div class="descripcion-container">
-          <div class="accordion-header" onclick="toggleDescripcion(${procedimiento.id})">
-            <span>Descripción</span>
-            <span class="icon">&#x25BE;</span>
-          </div>
-          <div class="descripcion collapsed" data-id="${procedimiento.id}">
-            <p>${procedimiento.descripcion}</p>
-          </div>
+        <div class="accordion">
+        <details>
+            <summary>Descripcion</summary>
+            <div class="content">
+               <p>${procedimiento.descripcion}</p>
+            </div>
+        </details>
+        </div>
           
         </div>
 
@@ -60,20 +62,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
   // --------------------------------------------------------------
-  window.toggleDescripcion = (id) => {
-    const descripcion = document.querySelector(`.descripcion[data-id="${id}"]`);
-    const icon = document.querySelector(`.descripcion[data-id="${id}"]`).closest('.descripcion-container').querySelector('.icon');
-
-    if (descripcion.classList.contains('collapsed')) {
-      descripcion.classList.remove('collapsed');
-      descripcion.classList.add('expanded');
-      icon.style.transform = 'rotate(180deg)';
-    } else {
-      descripcion.classList.remove('expanded');
-      descripcion.classList.add('collapsed');
-      icon.style.transform = 'rotate(0deg)';
-    }
-  };
+        
+        details.forEach(detail => {
+            detail.addEventListener('toggle', () => {
+                if (detail.open) {
+                    details.forEach(otherDetail => {
+                        if (otherDetail !== detail) {
+                            otherDetail.open = false;
+                        }
+                    });
+                }
+            });
+        });
 
   window.verArchivo = (archivo) => {
     if (!archivo || archivo === 'null') {

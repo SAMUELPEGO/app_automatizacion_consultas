@@ -6,19 +6,19 @@
 }
 
 body {
-    padding-left: 250px;
     font-family: 'Segoe UI', sans-serif;
     background-color: #f4f4f4;
+    padding-left: 250px;
 }
 
 .dashboard {
     display: flex;
-    height: 100vh;
+
 }
 
 .sidebar {
-    height: 100vh;
     position: fixed;
+    height: 100vh;
     top: 0;
     left: 0;
     width: 250px;
@@ -43,93 +43,78 @@ body {
 }
 
 .main-content {
+
     flex: 1;
     padding: 20px;
     background-color: #eef6ff;
 }
 
 .top-bar {
-    width: calc(100% - 280px);
     position: fixed;
-    border-radius: 10px;
+    width: calc(100% - 280px);
+    top: 2px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    top: 2px;
     padding: 20px;
     background: #3399cc;
     z-index: 999;
+    border-radius: 10px;
 }
 
 .top-bar h1 {
     color: #000066;
 }
 
-.top-bar button {
-    background-color:#000066;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.top-bar button:hover {
-    background-color: #267fb3;
-}
-
 .card-section {
     padding-top: 100px;
+    overflow: auto;
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
 .card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 102, 0.1);
+    background: linear-gradient(to bottom, #ffffff, #f9f9fb);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 102, 0.15);
     padding: 20px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 4px solid #3399cc;
+    overflow: hidden;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: 0 6px 20px rgba(0, 0, 102, 0.2);
 }
 
 .card .nombre {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
     color: #000066;
 }
 
-.descripcion-container {
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    overflow: hidden;
-    margin-top: 10px;
-    background-color: #f9f9f9;
+.card .especialista {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+    font-style: italic;
 }
 
-.accordion-header {
-    background-color: #e6f0ff;
-    color: #000066;
-    padding: 10px 15px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+.descripcion-container {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 10px;
+    background-color: #f5f7fa;
 }
 
 .accordion {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
     overflow: hidden;
 }
 
@@ -142,16 +127,17 @@ details:last-child {
 }
 
 summary {
-    padding: 20px;
-    background: #f8f9fa;
+    padding: 12px 16px;
+    background: #e6f0ff;
     cursor: pointer;
     list-style: none;
     font-weight: 500;
+    color: #000066;
     transition: background-color 0.3s;
 }
 
 summary:hover {
-    background: #e9ecef;
+    background: #d4ebff;
 }
 
 details[open] summary {
@@ -160,24 +146,18 @@ details[open] summary {
 }
 
 .content {
-    padding: 20px;
+    padding: 12px 16px;
     color: #333;
     line-height: 1.6;
+    text-wrap: wrap;
     word-wrap: break-word;
-    word-break: break-word;
-    overflow-wrap: break-word;
 }
 
-/* Ocultar el triángulo por defecto */
-summary::-webkit-details-marker {
-    display: none;
-}
-
-/* Agregar nuestro propio icono */
 summary::after {
     content: "▼";
     float: right;
     transition: transform 0.3s;
+    font-size: 12px;
 }
 
 details[open] summary::after {
@@ -187,27 +167,35 @@ details[open] summary::after {
 .card .acciones {
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px;
+    margin-top: 15px;
+    gap: 10px;
 }
 
 .card .acciones button {
-    margin-left: 5px;
-    padding: 5px 10px;
+    padding: 6px 12px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
-.btn-ver-archivo,
-.btn-editar {
+.btn-ver-archivo {
     background-color: #3399cc;
-    color: white;
 }
 
-.btn-eliminar {
-    background-color: red;
-    color: white;
+.btn-especialista {
+    background-color: #000066;
+}
+
+.btn-ver-archivo:hover {
+    background-color: #267fb3;
+}
+
+.btn-especialista:hover {
+    background-color: #00004c;
 }
 
 /* Modal */
@@ -254,13 +242,13 @@ details[open] summary::after {
     color: #000066;
 }
 
-.modal-content input,
 .modal-content textarea {
     width: 100%;
     padding: 8px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    resize: vertical;
 }
 
 .modal-content button {
