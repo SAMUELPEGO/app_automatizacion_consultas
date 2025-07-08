@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
   async function renderizarTarjetas() {
-    const get_procedimientos = await fetch("/obtener_procedimientos")
+    const get_procedimientos = await fetch("/obtener_procedimientos_por_especialista")
     const data = await get_procedimientos.json()
     if (!data.procedimientos?.length) {
 
@@ -38,9 +38,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             <span class="icon">&#x25BE;</span>
           </div>
           <div class="descripcion collapsed" data-id="${procedimiento.id}">
-            ${procedimiento.descripcion}
+            <p>${procedimiento.descripcion}</p>
           </div>
+          
         </div>
+
         <div class="acciones">
           <button class="btn-ver-archivo" onclick="verArchivo('${procedimiento.archivo}')">
             Ver Archivo

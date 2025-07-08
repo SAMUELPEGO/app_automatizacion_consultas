@@ -14,6 +14,7 @@ class Perfil(models.Model):
         choices=ROL_CHOICES,
         default='guardia'
     )
+    username = models.CharField(max_length=150, unique=True, blank=True, null=True)
 
     def __str__(self):
         return self.rol

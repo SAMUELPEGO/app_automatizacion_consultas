@@ -16,6 +16,8 @@ urlpatterns = [
        path("eliminar_procedimiento",procedimiento_repository.eliminar_procedimiento,name="eliminar_procedimiento"),
        path("actualizar_procedimiento",procedimiento_repository.actualizar_procedimiento,name="actualizar_procedimiento"),
        path("obtener_procedimientos",procedimiento_repository.obtener_procedimientos,name="obtener_procedimientos"),
+       path("obtener_procedimientos_por_especialista",procedimiento_repository.obtener_procedimientos_por_especialista,name="obtener_procedimientos_por_especialista"),
+
 
 
 ]

@@ -16,7 +16,23 @@ def obtener_procedimientos(request):
             'nombre': procedimiento.nombre,
             'descripcion': procedimiento.descripcion,
             'archivo': procedimiento.archivo.url if procedimiento.archivo else None,
-            'perfil_rol': procedimiento.perfil.rol if procedimiento.perfil else None,
+            'perfil_username': procedimiento.perfil.username if procedimiento.perfil else None,
+        })
+    return JsonResponse({'success': True, 'procedimientos': data})
+
+@login_required
+@require_http_methods(["GET"])
+def obtener_procedimientos_por_especialista(request):
+    especialista = request.user.username
+    procedimientos = Procedimiento.objects.filter(perfil__usuario__username=especialista)
+    data = []
+    for procedimiento in procedimientos:
+        data.append({
+            "id": procedimiento.id,
+            'nombre': procedimiento.nombre,
+            'descripcion': procedimiento.descripcion,
+            'archivo': procedimiento.archivo.url if procedimiento.archivo else None,
+            'perfil_username': procedimiento.perfil.username if procedimiento.perfil else None,
         })
     return JsonResponse({'success': True, 'procedimientos': data})
 
@@ -34,7 +50,9 @@ def crear_procedimiento(request):
             return JsonResponse({'success': False, 'error': 'Faltan datos obligatorios (nombre y rol).'}, status=400)
 
         with transaction.atomic():
-            perfil = Perfil.objects.create(rol=rol)
+            
+            perfil = request.user.perfil
+            print(perfil)
             procedimiento = Procedimiento.objects.create(
                 nombre=nombre,
                 descripcion=descripcion,

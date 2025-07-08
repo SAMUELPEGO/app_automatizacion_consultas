@@ -31,7 +31,7 @@ def crear_usuario(request):
             return JsonResponse({'success': False, 'error': 'Faltan datos obligatorios.'}, status=400)
 
         with transaction.atomic():
-            perfil = Perfil.objects.create(rol=rol)
+            perfil = Perfil.objects.create(rol=rol,username=username)
             usuario = Usuario.objects.create_user(
                 username=username,
                 password=password,
