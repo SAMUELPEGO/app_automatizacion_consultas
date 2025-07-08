@@ -19,7 +19,6 @@ class Perfil(models.Model):
         return self.rol
 
 class Usuario(AbstractUser):
-    
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True,primary_key=True)
     perfil = models.OneToOneField(
         Perfil,
