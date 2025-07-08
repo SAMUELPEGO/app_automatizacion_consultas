@@ -1,33 +1,32 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const cardSection = document.querySelector('.card-section');
   const modal = document.getElementById('modal');
+  const modalEdit = document.getElementById('modalEdit');
   const btnCrear = document.getElementById('btnCrearProcedimiento');
   const btnCerrarModal = document.getElementById('modalCerrar');
+  const btnCerrarModalEdit = document.getElementById('modalCerrarEdit');
   const formulario = document.getElementById('formularioProcedimiento');
-  const tituloModal = document.getElementById('modalTitulo');
-  const inputId = document.getElementById('procedimientoId');
+  const formularioProcedimiento = document.getElementById('formularioProcedimientoEdit');
   const inputNombre = document.getElementById('nombre');
   const inputDescripcion = document.getElementById('descripcion');
   const inputFile = document.getElementById('archivo');
+  const inputNombreEdit = document.getElementById('modalEditNombre');
+  const inputDescripcionEdit = document.getElementById('modalEditDescripcion');
+  const inputFileEdit = document.getElementById('modalEditArchivo');
 
-  let procedimientos = [
-    {
-      id: 1,
-      nombre: 'Procedimiento 1',
-      descripcion: 'Este es el primer procedimiento.',
-      archivo: 'documento1.pdf'
-    },
-    {
-      id: 2,
-      nombre: 'Procedimiento 2',
-      descripcion: 'Este es el segundo procedimiento.',
-      archivo: 'documento2.docx'
+
+
+  async function renderizarTarjetas() {
+    const get_procedimientos = await fetch("/obtener_procedimientos")
+    const data = await get_procedimientos.json()
+    if (!data.procedimientos?.length) {
+
+      cardSection.innerHTML = '';
     }
-  ];
-
-  function renderizarTarjetas() {
     cardSection.innerHTML = '';
-    procedimientos.forEach(procedimiento => {
+    console.log(data)
+    cardSection.innerHTML = '';
+    data.procedimientos.forEach(procedimiento => {
       const card = document.createElement('div');
       card.classList.add('card');
 
@@ -46,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <button class="btn-ver-archivo" onclick="verArchivo('${procedimiento.archivo}')">
             Ver Archivo
           </button>
-          <button class="btn-editar" onclick="editarProcedimiento(${procedimiento.id})">
+          <button class="btn-editar" onclick="editarProcedimiento('${procedimiento.id}')">
             Editar
           </button>
           <button class="btn-eliminar" onclick="eliminarProcedimiento(${procedimiento.id})">
@@ -58,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cardSection.appendChild(card);
     });
   }
-
+  // --------------------------------------------------------------
   window.toggleDescripcion = (id) => {
     const descripcion = document.querySelector(`.descripcion[data-id="${id}"]`);
     const icon = document.querySelector(`.descripcion[data-id="${id}"]`).closest('.descripcion-container').querySelector('.icon');
@@ -75,33 +74,49 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.verArchivo = (archivo) => {
-    alert(`Visualizando archivo: ${archivo}`);
+    if (!archivo || archivo === 'null') {
+      alert('No hay archivo disponible');
+      return;
+    }
+
+    try {
+      const nuevaVentana = window.open(archivo, '_blank');
+
+      if (!nuevaVentana || nuevaVentana.closed || typeof nuevaVentana.closed == 'undefined') {
+        alert('El navegador bloqueó la ventana emergente. Por favor, habilita las ventanas emergentes para este sitio.');
+      }
+    } catch (error) {
+      console.error('Error al abrir el archivo:', error);
+      alert('Error al abrir el archivo');
+    }
   };
 
   window.editarProcedimiento = (id) => {
-    const procedimiento = procedimientos.find(p => p.id === id);
-    if (procedimiento) {
-      inputId.value = procedimiento.id;
-      inputNombre.value = procedimiento.nombre;
-      inputDescripcion.value = procedimiento.descripcion;
-      tituloModal.textContent = 'Editar Procedimiento';
-      modal.style.display = 'block';
-    }
+    console.log("activandose" + id)
+    inputNombreEdit.value = '';
+    inputDescripcionEdit.value = '';
+    inputFileEdit.value = '';
+    modalEdit.style.display = 'block';
+    modalEdit.setAttribute('data-procedimiento-id', id);
   };
 
   window.eliminarProcedimiento = (id) => {
     if (confirm('¿Estás seguro de eliminar este procedimiento?')) {
-      procedimientos = procedimientos.filter(p => p.id !== id);
+      const formData = new FormData
+      formData.append('procedimiento_id', id);
+      fetch(`/eliminar_procedimiento`, {
+        method: 'POST',
+        body: formData
+      })
+      alert('Procedimiento eliminado correctamente');
       renderizarTarjetas();
     }
   };
 
   btnCrear.addEventListener('click', () => {
-    inputId.value = '';
     inputNombre.value = '';
     inputDescripcion.value = '';
     inputFile.value = '';
-    tituloModal.textContent = 'Crear Procedimiento';
     modal.style.display = 'block';
   });
 
@@ -109,29 +124,62 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.style.display = 'none';
   });
 
-  formulario.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const id = parseInt(inputId.value);
-    const nombre = inputNombre.value.trim();
-    const descripcion = inputDescripcion.value.trim();
-    const archivo = inputFile.files[0]?.name || '';
-
-    if (!nombre || !descripcion) return alert('Por favor, completa todos los campos.');
-
-    if (id) {
-      const procedimiento = procedimientos.find(p => p.id === id);
-      procedimiento.nombre = nombre;
-      procedimiento.descripcion = descripcion;
-      procedimiento.archivo = archivo;
-    } else {
-      const nuevoId = procedimientos.length ? Math.max(...procedimientos.map(p => p.id)) + 1 : 1;
-      procedimientos.push({ id: nuevoId, nombre, descripcion, archivo });
-    }
-
-    renderizarTarjetas();
-    modal.style.display = 'none';
+  btnCerrarModalEdit.addEventListener('click', () => {
+    modalEdit.style.display = 'none';
   });
 
-  renderizarTarjetas();
+  formulario.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(formulario);
+
+    try {
+      const response = await fetch('/crear_procedimiento', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        alert('procedimiento creado correctamente');
+        await renderizarTarjetas();
+        modal.style.display = 'none';
+        formulario.reset();
+      } else {
+        alert(data.error || 'Error al crear usuario');
+      }
+    } catch (error) {
+      alert('Error en la solicitud');
+    }
+  });
+
+  formularioProcedimiento.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const procedimientoId = modalEdit.getAttribute('data-procedimiento-id');
+    const formData = new FormData(formularioProcedimiento);
+    formData.append('procedimiento_id', procedimientoId);
+
+    try {
+      const response = await fetch('/actualizar_procedimiento', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        alert('procedimiento actualizado correctamente');
+        await renderizarTarjetas();
+        modal.style.display = 'none';
+        formulario.reset();
+      } else {
+        alert(data.error || 'Error al actualizar usuario');
+      }
+    } catch (error) {
+      alert('Error en la solicitud');
+    }
+  });
+
+  await renderizarTarjetas();
 });
+
