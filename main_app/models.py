@@ -41,6 +41,8 @@ class Procedimiento(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+   
 
 class Consulta(models.Model):
    
@@ -62,3 +64,12 @@ class Consulta(models.Model):
 
     def __str__(self):
         return f"Consulta de {self.emisor} a {self.receptor}"
+
+class Rotaciones(models.Model):
+    username = models.CharField(max_length=150)
+    fecha = models.CharField(max_length=150)
+    entrada = models.CharField(max_length=150)
+    salida = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.nombre

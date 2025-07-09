@@ -47,3 +47,10 @@ def guardia_consultas_page(request):
         return render(request,"guardia_consultas_page.html")
      else:
         return redirect('inicio_sesion')
+     
+@login_required
+def guardia_rotaciones_page(request):
+     if request.user.perfil.rol == 'guardia':
+        return render(request,"guardia_rotaciones_page.html")
+     else:
+        return redirect('inicio_sesion')

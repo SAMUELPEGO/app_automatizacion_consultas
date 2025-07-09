@@ -8,7 +8,7 @@ from django.db import transaction
 @login_required
 @require_http_methods(["GET"])
 def obtener_usuarios(request):
-    usuarios = Usuario.objects.all()
+    usuarios = Usuario.objects.exclude(perfil__rol='especialista_principal').all()
     data = []
     for usuario in usuarios:
         data.append({
