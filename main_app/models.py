@@ -37,14 +37,28 @@ class Procedimiento(models.Model):
     descripcion = models.TextField(blank=True)
     archivo = models.FileField(upload_to='procedimientos/', blank=True, null=True)
     perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='procedimientos')
+    creado_en = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.nombre
 
 class Consulta(models.Model):
-    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='consultas')
-    emisor = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='consultas_enviadas')
-    receptor = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='consultas_recibidas')
+   
+    emisor = models.CharField(blank=False)
+    receptor = models.CharField(blank=False)
+    contenido = models.TextField(blank=False)
+    respuesta = models.TextField(blank=True, null=True)
+    procedimiento_id = models.IntegerField(blank=False, null=False)
+    procedimiento_nombre = models.CharField(blank=False, null=False)
+    estado = models.CharField(
+        max_length=20,
+        choices=[
+            ('pendiente', 'Pendiente'),
+            ('respondida', 'Respondida'),
+        ],
+        default='pendiente'
+    )
+    creado_en = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Consulta de {self.emisor} a {self.receptor} para perfil {self.perfil}"
+        return f"Consulta de {self.emisor} a {self.receptor}"

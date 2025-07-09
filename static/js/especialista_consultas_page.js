@@ -4,39 +4,60 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
   async function renderizarTarjetas() {
-    const get_procedimientos = await fetch("/obtener_procedimientos")
-    const data = await get_procedimientos.json()
+    const get_consultas = await fetch("/obtener_consultas_por_receptor")
+    const data = await get_consultas.json()
     console.log(data);
-    if (!data.procedimientos?.length) {
+    if (!data.consultas?.length) {
 
-      cardSection.innerHTML = '';
+      cardSection.innerHTML = `<div style="
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    ">
+      <h1>Ups no se encontraron consultas</h1>
+    </div>`;
     }
     cardSection.innerHTML = '';
-    data.procedimientos.forEach(procedimiento => {
+    data.consultas.forEach(consulta => {
+      const fechaCreacion = new Date(consulta.creada_en).toLocaleDateString('es-ES', {
+        day: "2-digit", year: "numeric", month: "2-digit"
+      });
       const card = document.createElement('div');
       card.classList.add('card');
 
       card.innerHTML = `
-        <h3 class="nombre">${procedimiento.nombre}</h3>
-        <p class="especialista"><strong>Especialista:</strong> ${procedimiento.perfil_username}</p>
+        <h3 class="nombre">creada el: ${fechaCreacion}</h3>
+        <p class="especialista"><strong>Procedimiento:</strong> ${consulta.procedimiento_nombre}</p>
+        <p class="especialista"><strong>Consulta de:</strong> ${consulta.emisor}</p>
+        <p class="especialista"><strong>Estado:</strong> ${consulta.estado}</p>
+
        
         <div class="descripcion-container">
           <div class="accordion">
             <details>
-              <summary>Descripción</summary>
+              <summary>Mensaje</summary>
               <div class="content">
-                <p>${procedimiento.descripcion}</p>
+                <p>${consulta.contenido}</p>
+              </div>
+            </details>
+          </div>
+        </div>
+       <div class="descripcion-container">
+          <div class="accordion">
+            <details>
+              <summary>Tu respuesta</summary>
+              <div class="content">
+                <p>${!consulta.respuesta ? "<strong>No haz respondido</strong>" : consulta.respuesta}</p>
               </div>
             </details>
           </div>
         </div>
 
         <div class="acciones">
-          <button class="btn-especialista" onclick="abrirModalConsulta('${procedimiento.perfil_username}', '${procedimiento.id}','${procedimiento.nombre}')">
-            Consultar al Especialista
-          </button>
-          <button class="btn-ver-archivo" onclick="verArchivo('${procedimiento.archivo || '#'}')">
-            Ver Archivo
+          <button class="btn-ver-archivo" onclick="eliminarConsulta('${consulta.id}')">
+            Responder
           </button>
         </div>
       `;
@@ -53,11 +74,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.open(url, '_blank');
   };
 
-  window.abrirModalConsulta = (nombreEspecialista, procedimiento_id, procedimiento_nombre) => {
-    console.log(nombreEspecialista, procedimiento_id,procedimiento_nombre);
+  window.abrirModalConsulta = (nombreEspecialista, procedimiento_id) => {
+    console.log(nombreEspecialista, procedimiento_id);
     document.getElementById('nombreEspecialistaInput').value = nombreEspecialista;
     document.getElementById('procedimientoId').value = procedimiento_id;
-    document.getElementById('procedimientoNombre').value = procedimiento_nombre;
     document.getElementById('tituloModalEspecialista').textContent = `Consultar a ${nombreEspecialista}`;
     document.getElementById('modalConsulta').style.display = 'block';
   };
@@ -95,32 +115,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     cerrarModalConsulta();
   };
 
-  // formulario.addEventListener('submit', async (e) => {
-  //   e.preventDefault();
+  window.eliminarConsulta = async (consultaId) => {
+    if (!confirm('¿Estás seguro de que deseas eliminar esta consulta?')) {
+      return;
+    }
+    const formData = new FormData()
+    formData.append('consulta_id', consultaId);
+    try {
+      const response = await fetch(`/eliminar_consulta`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert('Consulta eliminada correctamente');
+        await renderizarTarjetas();
+      } else {
+        alert(data.error || 'Error al eliminar la consulta');
+      }
+    } catch (error) {
+      console.error('Error al eliminar la consulta:', error);
+      alert('Ocurrió un error al eliminar la consulta.');
+    }
 
-  //   const formData = new FormData(formulario);
-
-  //   try {
-  //     const response = await fetch('/crear_consulta', {
-  //       method: 'POST',
-  //       body: formData
-  //     });
-  //     const data = await response.json();
-
-  //     if (data.success) {
-  //       alert('cunsulta creada correctamente');
-  //       await renderizarTarjetas();
-  //       modal.style.display = 'none';
-  //       formulario.reset();
-  //     } else {
-  //       alert(data.error || 'Error al crear consulta');
-  //     }
-  //   } catch (error) {
-  //     alert('Error en la solicitud');
-  //   }
-  // });
-
-  // Event Listeners para el modal
+  }
   document.getElementById('modalCerrarConsulta').addEventListener('click', cerrarModalConsulta);
   document.getElementById('formularioConsulta').addEventListener('submit', enviarConsulta);
 

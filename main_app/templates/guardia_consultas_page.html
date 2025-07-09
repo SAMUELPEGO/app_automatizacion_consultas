@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Procedimientos Médicos</title>
+    <link rel="stylesheet" href="static/css/guardia_consultas_page.css" />
+    <script src="static/js/guardia_consultas_page.js" defer></script>
+  </head>
+  <body>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <h2>Menú</h2>
+        <ul>
+          <li><a href="guardia_page">Procedimientos</a></li>
+          <li><a href="guardia_consultas_page">Consultas</a></li>
+        </ul>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <h1>Panel de Guardia</h1>
+        </header>
+
+        <section class="card-section"></section>
+      </main>
+    </div>
+
+    <div id="modalConsulta" class="modal">
+      <div class="modal-content">
+        <span id="modalCerrarConsulta">&times;</span>
+        <h2 id="tituloModalEspecialista">Consultar al Especialista</h2>
+        <form id="formularioConsulta">
+          <input type="hidden" id="nombreEspecialistaInput" name="receptor" />
+          <input type="hidden" id="procedimientoId" name="procedimiento_id" />
+          <label for="consultaTexto">Tu consulta:</label>
+          <textarea
+            id="consultaTexto"
+            rows="5"
+            required
+            name="contenido"
+          ></textarea>
+          <button type="submit">Enviar Consulta</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

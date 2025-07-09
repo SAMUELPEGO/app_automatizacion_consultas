@@ -62,18 +62,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
   // --------------------------------------------------------------
-        
-        details.forEach(detail => {
-            detail.addEventListener('toggle', () => {
-                if (detail.open) {
-                    details.forEach(otherDetail => {
-                        if (otherDetail !== detail) {
-                            otherDetail.open = false;
-                        }
-                    });
-                }
-            });
+
+  details.forEach(detail => {
+    detail.addEventListener('toggle', () => {
+      if (detail.open) {
+        details.forEach(otherDetail => {
+          if (otherDetail !== detail) {
+            otherDetail.open = false;
+          }
         });
+      }
+    });
+  });
 
   window.verArchivo = (archivo) => {
     if (!archivo || archivo === 'null') {
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.style.display = 'none';
         formulario.reset();
       } else {
-        alert(data.error || 'Error al crear usuario');
+        alert(data.error || 'Error al crear procedimiento');
       }
     } catch (error) {
       alert('Error en la solicitud');
@@ -182,6 +182,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  await renderizarTarjetas();
+    await renderizarTarjetas();
 });
 

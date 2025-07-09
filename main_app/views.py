@@ -20,8 +20,22 @@ def especialista_page(request):
         return redirect('inicio_sesion')
      
 @login_required
+def especialista_consultas_page(request):
+     if request.user.perfil.rol == 'especialista':
+        return render(request,"especialista_consultas_page.html")
+     else:
+        return redirect('inicio_sesion')
+     
+@login_required
 def guardia_page(request):
      if request.user.perfil.rol == 'guardia':
         return render(request,"guardia_page.html")
+     else:
+        return redirect('inicio_sesion')
+     
+@login_required
+def guardia_consultas_page(request):
+     if request.user.perfil.rol == 'guardia':
+        return render(request,"guardia_consultas_page.html")
      else:
         return redirect('inicio_sesion')
