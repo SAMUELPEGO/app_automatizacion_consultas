@@ -1,22 +1,27 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const cardSection = document.querySelector('.card-section');
+  const inputBuscar = document.getElementById('inputBuscar');
+  const btnBuscar = document.getElementById('btnBuscar');
+  const btnRecargar = document.getElementById('btnRecargar');
 
+  function recargarPagina() {
+    location.reload(); 
+  }
 
   async function renderizarTarjetas() {
     const get_consultas = await fetch("/obtener_consultas_por_emisor")
     const data = await get_consultas.json()
     console.log(data);
-    if (!data.consultas?.length) {
-
-      cardSection.innerHTML = `<div style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    ">
-      <h1>Ups no se encontraron consultas</h1>
-    </div>`;
+    if (data.consultas?.length) {
+      if (inputBuscar.value.trim() !== '') {
+        data.consultas = data.consultas.filter(consulta =>
+          consulta.procedimiento_nombre.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          consulta.receptor.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          consulta.estado.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          consulta.contenido.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          consulta.creada_en.toLowerCase().includes(inputBuscar.value.toLowerCase())
+        );
+      }
     }
     cardSection.innerHTML = '';
     data.consultas.forEach(consulta => {
@@ -140,6 +145,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   document.getElementById('modalCerrarConsulta').addEventListener('click', cerrarModalConsulta);
   document.getElementById('formularioConsulta').addEventListener('submit', enviarConsulta);
+  btnBuscar.addEventListener('click', renderizarTarjetas);
+  btnRecargar.addEventListener('click', recargarPagina);
 
   await renderizarTarjetas();
 });

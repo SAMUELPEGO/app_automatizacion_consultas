@@ -11,13 +11,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   const inputPassword = document.getElementById('password');
   const modalEditInputNombre = document.getElementById('modalEditUsername');
   const modalEditInputPassword = document.getElementById('modalEditPassword');
+  const inputBuscar = document.getElementById('inputBuscar');
+  const btnBuscar = document.getElementById('btnBuscar');
+  const btnRecargar = document.getElementById('btnRecargar');
+
+  function recargarPagina() {
+    location.reload();
+  }
 
   async function renderizarTabla() {
     const get_usuarios = await fetch("/obtener_usuarios")
     const data = await get_usuarios.json()
-    if (!data.usuarios?.length) {
+    if (data.usuarios?.length) {
+      if (inputBuscar.value.trim() !== '') {
+        data.usuarios = data.usuarios.filter(usuario =>
+          usuario.username.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          usuario.rol.toLowerCase().includes(inputBuscar.value.toLowerCase())
 
-      tabla.innerHTML = '';
+        );
+      }
     }
     tabla.innerHTML = '';
     console.log(data)
@@ -125,6 +137,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       alert('Error en la solicitud');
     }
   });
+
+  btnBuscar.addEventListener('click', renderizarTabla);
+  btnRecargar.addEventListener('click', recargarPagina);
 
   await renderizarTabla();
 });

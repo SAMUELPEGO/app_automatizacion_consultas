@@ -17,14 +17,14 @@ body {
 }
 
 .sidebar {
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    background-color: #000066;
-    color: white;
-    padding: 20px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  background-color: #000066;
+  color: white;
+  padding: 20px;
 }
 
 .sidebar h2 {
@@ -49,25 +49,79 @@ body {
 }
 
 .top-bar {
-    width: calc(100% - 280px);
-    position: fixed;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    top: 2px;
-    padding: 20px;
-    background: #3399cc;
-    z-index: 999;
+  width: calc(100% - 280px);
+  position: fixed;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  top: 2px;
+  padding: 20px;
+  background: #3399cc;
+  z-index: 999;
 }
 
 .top-bar h1 {
   color: #000066;
 }
 
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.search-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 70%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #007BFF;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.search-button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+.reload-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reload-button:hover {
+  background-color: #5a6268;
+}
+
 .top-bar button {
-  background-color:#000066;
+  background-color: #000066;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -81,8 +135,10 @@ body {
 }
 
 .table-section {
-  margin-top: 100px; /* Adjusted to account for the fixed top bar */
+  margin-top: 100px;
+  /* Adjusted to account for the fixed top bar */
 }
+
 .table-section table {
   width: 100%;
   border-collapse: collapse;

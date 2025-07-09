@@ -14,16 +14,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   const inputDescripcionEdit = document.getElementById('modalEditDescripcion');
   const inputFileEdit = document.getElementById('modalEditArchivo');
   const details = document.querySelectorAll('details');
+  const inputBuscar = document.getElementById('inputBuscar');
+  const btnBuscar = document.getElementById('btnBuscar');
+  const btnRecargar = document.getElementById('btnRecargar');
 
-
-
+  function recargarPagina() {
+    location.reload(); 
+  }
 
   async function renderizarTarjetas() {
     const get_procedimientos = await fetch("/obtener_procedimientos_por_especialista")
     const data = await get_procedimientos.json()
-    if (!data.procedimientos?.length) {
-
-      cardSection.innerHTML = '';
+    if (data.procedimientos?.length) {
+      if (inputBuscar.value.trim() !== '') {
+        data.procedimientos = data.procedimientos.filter(procedimiento =>
+          procedimiento.nombre.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          procedimiento.descripcion.toLowerCase().includes(inputBuscar.value.toLowerCase())
+        );
+      }
     }
     cardSection.innerHTML = '';
     console.log(data)
@@ -181,7 +189,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       alert('Error en la solicitud');
     }
   });
+  btnBuscar.addEventListener('click', renderizarTarjetas);
+  btnRecargar.addEventListener('click', recargarPagina);
 
-    await renderizarTarjetas();
+  await renderizarTarjetas();
 });
 

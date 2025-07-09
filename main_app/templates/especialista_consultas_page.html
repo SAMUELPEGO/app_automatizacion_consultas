@@ -13,13 +13,25 @@
         <h2>Menú</h2>
         <ul>
           <li><a href="especialista_page">Procedimientos</a></li>
-          <li><a href="especialista_consultas_page" class="selected">Consultas</a></li>
+          <li>
+            <a href="especialista_consultas_page" class="selected">Consultas</a>
+          </li>
         </ul>
       </aside>
 
       <main class="main-content">
         <header class="top-bar">
           <h1>Panel de Especialista</h1>
+          <div class="search-container">
+            <input
+              type="text"
+              id="inputBuscar"
+              placeholder="Buscar..."
+              class="search-input"
+            />
+            <button id="btnBuscar" class="search-button">Buscar</button>
+            <button id="btnRecargar" class="reload-button">reiniciar</button>
+          </div>
         </header>
 
         <section class="card-section"></section>

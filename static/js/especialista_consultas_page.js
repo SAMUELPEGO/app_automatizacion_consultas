@@ -1,23 +1,37 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const cardSection = document.querySelector('.card-section');
   const formulario = document.getElementById('FormularioConsulta');
+  const inputBuscar = document.getElementById('inputBuscar');
+  const btnBuscar = document.getElementById('btnBuscar');
+  const btnRecargar = document.getElementById('btnRecargar');
 
+  formmatearFecha = (fecha) => {
+
+    return fechaCreacion = new Date(fecha).toLocaleDateString('es-ES', {
+      day: "2-digit", year: "numeric", month: "2-digit"
+    });
+  }
+
+  function recargarPagina() {
+    location.reload();
+  }
 
   async function renderizarTarjetas() {
     const get_consultas = await fetch("/obtener_consultas_por_receptor")
     const data = await get_consultas.json()
     console.log(data);
-    if (!data.consultas?.length) {
+    if (data.consultas?.length) {
+      if (inputBuscar.value.trim() !== '') {
+        data.consultas = data.consultas.filter(consulta =>
+          formmatearFecha(consulta.creada_en).toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          consulta.emisor.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          consulta.procedimiento_nombre.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          consulta.estado.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          consulta.contenido.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          consulta.respuesta?.toLowerCase().includes(inputBuscar.value.toLowerCase())
 
-      cardSection.innerHTML = `<div style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    ">
-      <h1>Ups no se encontraron consultas</h1>
-    </div>`;
+        );
+      }
     }
     cardSection.innerHTML = '';
     data.consultas.forEach(consulta => {
@@ -56,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
 
         <div class="acciones">
-          <button class="btn-ver-archivo" onclick="abrirModalConsulta('${consulta.id}')" ${consulta.estado == "respondida" && "disabled" }>
+          <button class="btn-ver-archivo" onclick="abrirModalConsulta('${consulta.id}')" ${consulta.estado == "respondida" && "disabled"}>
             Responder
           </button>
         </div>
@@ -69,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   window.abrirModalConsulta = (consultaId) => {
     document.getElementById('consultaIdInput').value = consultaId;
-    
+
     document.getElementById('modalConsulta').style.display = 'block';
   };
 
@@ -108,6 +122,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.getElementById('modalCerrarConsulta').addEventListener('click', cerrarModalConsulta);
   document.getElementById('formularioConsulta').addEventListener('submit', enviarConsulta);
+  btnBuscar.addEventListener('click', renderizarTarjetas);
+  btnRecargar.addEventListener('click', recargarPagina);
+
 
   await renderizarTarjetas();
 });

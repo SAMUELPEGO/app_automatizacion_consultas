@@ -12,7 +12,9 @@
       <aside class="sidebar">
         <h2>Menú</h2>
         <ul>
-          <li><a href="especialista_page" class="selected">Procedimientos</a></li>
+          <li>
+            <a href="especialista_page" class="selected">Procedimientos</a>
+          </li>
           <li><a href="especialista_consultas_page">Consultas</a></li>
         </ul>
       </aside>
@@ -20,6 +22,17 @@
       <main class="main-content">
         <header class="top-bar">
           <h1>Panel de Especialista</h1>
+          <div class="search-container">
+            <input
+              type="text"
+              id="inputBuscar"
+              placeholder="Buscar..."
+              class="search-input"
+            />
+            <button id="btnBuscar" class="search-button">Buscar</button>
+            <button id="btnRecargar" class="reload-button">reiniciar</button>
+
+          </div>
           <button id="btnCrearProcedimiento">Crear Procedimiento</button>
         </header>
 

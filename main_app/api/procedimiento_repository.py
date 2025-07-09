@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from main_app.models import Procedimiento, Perfil
+from main_app.models import Procedimiento, Perfil, Consulta
 from django.db import transaction
 
 @login_required
@@ -109,8 +109,10 @@ def eliminar_procedimiento(request):
         if not procedimiento_id:
             return JsonResponse({'success': False, 'error': 'ID de procedimiento es requerido.'}, status=400)
         
-        procedimiento = Procedimiento.objects.get(id=procedimiento_id)
-        procedimiento.delete()
+        with transaction.atomic():
+            Consulta.objects.filter(procedimiento_id=procedimiento_id).delete()
+
+            Procedimiento.objects.get(id=procedimiento_id).delete()
         
         return JsonResponse({'success': True, 'message': "Procedimiento eliminado correctamente"})
     except Procedimiento.DoesNotExist:

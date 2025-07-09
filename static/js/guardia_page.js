@@ -1,24 +1,28 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const cardSection = document.querySelector('.card-section');
-  const formulario = document.getElementById('FormularioConsulta');
+  const inputBuscar = document.getElementById('inputBuscar');
+  const btnBuscar = document.getElementById('btnBuscar');
+  const btnRecargar = document.getElementById('btnRecargar');
 
+
+  function recargarPagina() {
+    location.reload();
+  }
 
   async function renderizarTarjetas() {
+
+
     const get_procedimientos = await fetch("/obtener_procedimientos")
     const data = await get_procedimientos.json()
     console.log(data);
     if (data.procedimientos?.length) {
-
-      cardSection.innerHTML = `<div style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    ">
-      <h1>Ups no se encontraron consultas</h1>
-    </div>`;
-
+      if (inputBuscar.value.trim() !== '') {
+        data.procedimientos = data.procedimientos.filter(procedimiento =>
+          procedimiento.nombre.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          procedimiento.perfil_username.toLowerCase().includes(inputBuscar.value.toLowerCase()) ||
+          procedimiento.descripcion.toLowerCase().includes(inputBuscar.value.toLowerCase())
+        );
+      }
     }
     cardSection.innerHTML = '';
     data.procedimientos.forEach(procedimiento => {
@@ -63,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   window.abrirModalConsulta = (nombreEspecialista, procedimiento_id, procedimiento_nombre) => {
-    console.log(nombreEspecialista, procedimiento_id,procedimiento_nombre);
+    console.log(nombreEspecialista, procedimiento_id, procedimiento_nombre);
     document.getElementById('nombreEspecialistaInput').value = nombreEspecialista;
     document.getElementById('procedimientoId').value = procedimiento_id;
     document.getElementById('procedimientoNombre').value = procedimiento_nombre;
@@ -104,34 +108,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     cerrarModalConsulta();
   };
 
-  // formulario.addEventListener('submit', async (e) => {
-  //   e.preventDefault();
-
-  //   const formData = new FormData(formulario);
-
-  //   try {
-  //     const response = await fetch('/crear_consulta', {
-  //       method: 'POST',
-  //       body: formData
-  //     });
-  //     const data = await response.json();
-
-  //     if (data.success) {
-  //       alert('cunsulta creada correctamente');
-  //       await renderizarTarjetas();
-  //       modal.style.display = 'none';
-  //       formulario.reset();
-  //     } else {
-  //       alert(data.error || 'Error al crear consulta');
-  //     }
-  //   } catch (error) {
-  //     alert('Error en la solicitud');
-  //   }
-  // });
-
-  // Event Listeners para el modal
   document.getElementById('modalCerrarConsulta').addEventListener('click', cerrarModalConsulta);
   document.getElementById('formularioConsulta').addEventListener('submit', enviarConsulta);
+  btnBuscar.addEventListener('click', renderizarTarjetas);
+  btnRecargar.addEventListener('click', recargarPagina);
 
   await renderizarTarjetas();
 });

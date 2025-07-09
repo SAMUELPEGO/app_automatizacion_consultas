@@ -6,7 +6,6 @@
     <title>Gestión de Usuarios</title>
     <link rel="stylesheet" href="static/css/especialista_principal_page.css" />
     <script src="static/js/especialista_principal_page.js" defer></script>
-
   </head>
   <body>
     <div class="dashboard">
@@ -20,6 +19,17 @@
       <main class="main-content">
         <header class="top-bar">
           <h1>Panel de Usuarios</h1>
+          <div class="search-container">
+            <input
+              type="text"
+              id="inputBuscar"
+              placeholder="Buscar..."
+              class="search-input"
+            />
+            <button id="btnBuscar" class="search-button">Buscar</button>
+            <button id="btnRecargar" class="reload-button">reiniciar</button>
+
+          </div>
           <button id="btnCrearUsuario">Crear Usuario</button>
         </header>
 
@@ -64,8 +74,6 @@
       </div>
     </div>
 
-
-
     <div id="modalEdit" class="modal">
       <div class="modal-content">
         <span id="modalCerrarEdit">&times;</span>
@@ -74,7 +82,12 @@
           <label for="username">Nombre:</label>
           <input type="text" id="modalEditUsername" name="username" required />
           <label for="password">Password:</label>
-          <input type="password" id="modalEditPassword" name="password" required />
+          <input
+            type="password"
+            id="modalEditPassword"
+            name="password"
+            required
+          />
 
           <label for="rol">Rol:</label>
           <select id="rol" name="rol" required>
@@ -88,7 +101,5 @@
         </form>
       </div>
     </div>
-
-
   </body>
 </html>
