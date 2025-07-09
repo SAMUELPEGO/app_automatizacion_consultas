@@ -10,19 +10,29 @@
   <body>
     <div class="dashboard">
       <aside class="sidebar">
-        <h2>Menú</h2>
+        <img
+          src="/static/imagenes/logo_etecsa.jpg"
+          alt="logo_etecsa"
+          class="logo"
+        />
+
         <ul>
           <li><a href="especialista_page">Procedimientos</a></li>
           <li>
             <a href="especialista_consultas_page" class="selected">Consultas</a>
           </li>
         </ul>
-        <button onclick="window.location.href = 'cerrar_sesion'" class="btn_cerrarSesion">Cerrar sesión</button>
-
+        <button
+          onclick="window.location.href = 'cerrar_sesion'"
+          class="btn_cerrarSesion"
+        >
+          Cerrar sesión
+        </button>
       </aside>
 
       <main class="main-content">
         <header class="top-bar">
+          
           <h1>Consultas</h1>
           <div class="search-container">
             <input

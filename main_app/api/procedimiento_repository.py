@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from main_app.models import Procedimiento, Perfil, Consulta
 from django.db import transaction
+from django.conf import settings
+import os 
 
 @login_required
 @require_http_methods(["GET"])
@@ -89,7 +91,12 @@ def actualizar_procedimiento(request):
                 procedimiento.perfil.save()
             else:
                 procedimiento.perfil = Perfil.objects.create(rol=rol)
+
         if archivo:
+            if procedimiento.archivo:
+                archivo_anterior_path = procedimiento.archivo.path
+                if os.path.exists(archivo_anterior_path):
+                    os.remove(archivo_anterior_path)
             procedimiento.archivo = archivo
 
         procedimiento.save()
@@ -99,6 +106,9 @@ def actualizar_procedimiento(request):
         return JsonResponse({'success': False, 'error': 'Procedimiento no encontrado.'}, status=404)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+import os
+from django.db import transaction
 
 @login_required
 @csrf_exempt
@@ -110,9 +120,17 @@ def eliminar_procedimiento(request):
             return JsonResponse({'success': False, 'error': 'ID de procedimiento es requerido.'}, status=400)
         
         with transaction.atomic():
+            # Obtener el procedimiento antes de eliminarlo para acceder al archivo
+            procedimiento = Procedimiento.objects.get(id=procedimiento_id)
+            
+            if procedimiento.archivo:
+                archivo_path = procedimiento.archivo.path
+                if os.path.exists(archivo_path):
+                    os.remove(archivo_path)
+            
             Consulta.objects.filter(procedimiento_id=procedimiento_id).delete()
-
-            Procedimiento.objects.get(id=procedimiento_id).delete()
+            
+            procedimiento.delete()
         
         return JsonResponse({'success': True, 'message': "Procedimiento eliminado correctamente"})
     except Procedimiento.DoesNotExist:
