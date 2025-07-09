@@ -1,9 +1,23 @@
-# EJECUTAR EN EL SHELL DE DJANGO
+
+
+# INSTRUCCIONES INICIALES DE INSTALACION QUE CORRESPONDEN A LAS MIGRACIONES INICIALES Y A LA CREACION DEL PRIMER USUARIO 
+
+# asegurate de estar en el entorno virtual de tu proyecto
+# python -m venv env
+
+# instala las dependencias
+# pip install -r requirements.txt
+
+# Ejecuta los siguientes comandos en la terminal:
+# python manage.py makemigrations main_app
+# python manage.py migrate
 # python manage.py shell
 
+# copia el siguiente codigo en la shell de django para crear el primer usuario
+
 from django.db import transaction
-from django.contrib.auth.models import User
-from ..models import Perfil, Usuario  
+from ..models import Perfil, Usuario
+
 
 usuario_campos = {
     'username': 'admin',

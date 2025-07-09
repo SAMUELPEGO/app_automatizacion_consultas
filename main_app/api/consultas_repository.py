@@ -5,18 +5,18 @@ from django.views.decorators.csrf import csrf_exempt
 from main_app.models import Consulta
 from django.db import transaction
 
-# @login_required
-# @require_http_methods(["GET"])
-# def obtener_consultas(request):
-#     consultas = Consulta.objects.all()
-#     data = []
-#     for consulta in consultas:
-#         data.append({
-#             "id": consulta.id,
-#             'emisor': consulta.emisor,
-#             'receptor': consulta.receptor,
-#         })
-#     return JsonResponse({'success': True, 'consultas': data})
+@login_required
+@require_http_methods(["GET"])
+def obtener_consultas(request):
+    consultas = Consulta.objects.all()
+    data = []
+    for consulta in consultas:
+        data.append({
+            "id": consulta.id,
+            'emisor': consulta.emisor,
+            'receptor': consulta.receptor,
+        })
+    return JsonResponse({'success': True, 'consultas': data})
 
 @login_required
 @require_http_methods(["GET"])

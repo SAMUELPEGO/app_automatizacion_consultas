@@ -18,7 +18,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   function recargarPagina() {
     location.reload();
   }
+  const API_URLS = {
+    procedimientos: '/obtener_procedimientos',
+    consultas: '/obtener_consultas',
+    usuarios: '/obtener_usuarios'
+  };
 
+  async function fetchData(endpoint) {
+    try {
+      const response = await fetch(endpoint);
+      const result = await response.json();
+      return result.success ? result : null;
+    } catch (error) {
+      console.error("Error al obtener datos:", error);
+      return null;
+    }
+  }
+
+  async function loadCounts() {
+    const procData = await fetchData(API_URLS.procedimientos);
+    const consData = await fetchData(API_URLS.consultas);
+    const userData = await fetchData(API_URLS.usuarios);
+
+    document.getElementById('count-procedimientos').textContent = procData?.procedimientos.length || 0;
+    document.getElementById('count-consultas').textContent = consData?.consultas.length || 0;
+    document.getElementById('count-usuarios').textContent = userData?.usuarios.length || 0;
+  }
+
+  window.onload = loadCounts;
   async function renderizarTabla() {
     const get_usuarios = await fetch("/obtener_usuarios")
     const data = await get_usuarios.json()

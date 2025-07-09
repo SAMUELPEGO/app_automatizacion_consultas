@@ -10,19 +10,27 @@
   <body>
     <div class="dashboard">
       <aside class="sidebar">
-        <img src="/static/imagenes/logo_etecsa.jpg" alt="logo_etecsa" class="logo">
+        <img
+          src="/static/imagenes/logo_etecsa.jpg"
+          alt="logo_etecsa"
+          class="logo"
+        />
         <ul>
           <li>
             <a href="especialista_principal_page" class="selected"
-              >Gestión de usuarios</a
+              >Usuarios y métricas</a
             >
           </li>
           <li>
             <a href="especialista_principal_rotaciones_page">Rotaciones</a>
           </li>
         </ul>
-        <button onclick="window.location.href = 'cerrar_sesion'" class="btn_cerrarSesion">Cerrar sesión</button>
-
+        <button
+          onclick="window.location.href = 'cerrar_sesion'"
+          class="btn_cerrarSesion"
+        >
+          Cerrar sesión
+        </button>
       </aside>
 
       <main class="main-content">
@@ -32,7 +40,7 @@
             <input
               type="text"
               id="inputBuscar"
-              placeholder="Buscar..."
+              placeholder="Buscar usuario..."
               class="search-input"
             />
             <button id="btnBuscar" class="search-button">Buscar</button>
@@ -40,7 +48,91 @@
           </div>
           <button id="btnCrearUsuario">Crear Usuario</button>
         </header>
+        <div
+          class="mini-dashboard"
+          style="
+            padding: 20px;
+            background-color: #eef6ff;
+            font-family: 'Segoe UI', sans-serif;
+          "
+        >
+          <h2 style="color: #000066; margin-bottom: 20px">
+            Resumen del Sistema
+          </h2>
 
+          <div style="display: flex; gap: 20px; flex-wrap: wrap">
+            <div
+              class="card"
+              style="
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 102, 0.1);
+                width: 200px;
+                text-align: center;
+                border-left: 5px solid #3399cc;
+              "
+            >
+              <h3 style="color: #000066; font-size: 18px; margin-bottom: 10px">
+                Procedimientos
+              </h3>
+              <p
+                id="count-procedimientos"
+                style="font-size: 24px; color: #3399cc; font-weight: bold"
+              >
+                0
+              </p>
+            </div>
+
+            <!-- Tarjeta Consultas -->
+            <div
+              class="card"
+              style="
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 102, 0.1);
+                width: 200px;
+                text-align: center;
+                border-left: 5px solid #007bff;
+              "
+            >
+              <h3 style="color: #000066; font-size: 18px; margin-bottom: 10px">
+                Consultas
+              </h3>
+              <p
+                id="count-consultas"
+                style="font-size: 24px; color: #007bff; font-weight: bold"
+              >
+                0
+              </p>
+            </div>
+
+            <!-- Tarjeta Usuarios -->
+            <div
+              class="card"
+              style="
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 102, 0.1);
+                width: 200px;
+                text-align: center;
+                border-left: 5px solid #000066;
+              "
+            >
+              <h3 style="color: #000066; font-size: 18px; margin-bottom: 10px">
+                Usuarios
+              </h3>
+              <p
+                id="count-usuarios"
+                style="font-size: 24px; color: #000066; font-weight: bold"
+              >
+                0
+              </p>
+            </div>
+          </div>
+        </div>
         <section class="table-section">
           <table id="usuariosTabla">
             <thead>
@@ -73,8 +165,6 @@
           <select id="modalEditRol" name="rol" required>
             <option value="guardia">Guardia</option>
             <option value="especialista">Especialista</option>
-              Especialista Principal
-            </option>
           </select>
           <button type="submit">Guardar</button>
         </form>
@@ -100,9 +190,6 @@
           <select id="rol" name="rol" required>
             <option value="guardia">Guardia</option>
             <option value="especialista">Especialista</option>
-            <option value="especialista_principal">
-              Especialista Principal
-            </option>
           </select>
           <button type="submit">Guardar</button>
         </form>
