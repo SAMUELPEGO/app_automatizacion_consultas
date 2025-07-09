@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
 
         <div class="acciones">
-          <button class="btn-ver-archivo" onclick="abrirModalConsulta('${consulta.id}')">
+          <button class="btn-ver-archivo" onclick="abrirModalConsulta('${consulta.id}')" ${consulta.estado == "respondida" && "disabled" }>
             Responder
           </button>
         </div>

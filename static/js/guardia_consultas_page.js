@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const cardSection = document.querySelector('.card-section');
-  const formulario = document.getElementById('FormularioConsulta');
 
 
   async function renderizarTarjetas() {

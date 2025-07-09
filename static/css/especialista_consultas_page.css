@@ -36,12 +36,24 @@ body {
 }
 
 .sidebar li {
+    width: 100%;
     margin: 15px 0;
     cursor: pointer;
     color: #3399cc;
     font-weight: bold;
 }
-
+.sidebar a {
+    width: 100vw;
+    text-decoration: none;
+    padding: 5px;
+    
+}
+.sidebar a:hover {
+    color: white;
+}
+.sidebar a.selected {
+    color: white;
+}
 .main-content {
 
     flex: 1;
@@ -183,11 +195,14 @@ details[open] summary::after {
 }
 
 .btn-ver-archivo {
-    background:rgb(226, 31, 31) !important;
+    background:rgb(226, 31, 31);
 }
 
 
 .btn-ver-archivo:hover {
+    background: rgb(214, 88, 88) ;
+}
+.btn-ver-archivo:disabled {
     background: rgb(214, 88, 88) !important;
 }
 

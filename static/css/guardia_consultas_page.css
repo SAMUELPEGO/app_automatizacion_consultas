@@ -42,6 +42,21 @@ body {
     font-weight: bold;
 }
 
+.sidebar a {
+    width: 100vw;
+    text-decoration: none;
+    padding: 5px;
+
+}
+
+.sidebar a:hover {
+    color: white;
+}
+
+.sidebar a.selected {
+    color: white;
+}
+
 .main-content {
 
     flex: 1;
@@ -183,7 +198,7 @@ details[open] summary::after {
 }
 
 .btn-ver-archivo {
-    background:rgb(226, 31, 31) !important;
+    background: rgb(226, 31, 31) !important;
 }
 
 

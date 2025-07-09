@@ -7,9 +7,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const get_procedimientos = await fetch("/obtener_procedimientos")
     const data = await get_procedimientos.json()
     console.log(data);
-    if (!data.procedimientos?.length) {
+    if (data.procedimientos?.length) {
 
-      cardSection.innerHTML = '';
+      cardSection.innerHTML = `<div style="
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    ">
+      <h1>Ups no se encontraron consultas</h1>
+    </div>`;
+
     }
     cardSection.innerHTML = '';
     data.procedimientos.forEach(procedimiento => {
