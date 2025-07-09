@@ -27,8 +27,14 @@ body {
   padding: 20px;
 }
 
-.sidebar h2 {
-  margin-bottom: 20px;
+.sidebar .logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  margin-left: 105px;
+  transform: translateX(-50px);
+
+
 }
 
 .sidebar ul {
@@ -54,6 +60,25 @@ body {
   color: white;
 }
 
+.btn_cerrarSesion {
+  padding: 15px;
+  position: absolute;
+  top: 80vh;
+  right: 0;
+  width: 90%;
+  background: rgb(173, 31, 31);
+  border: none;
+  color: whitesmoke;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  cursor: pointer;
+}
+
+.btn_cerrarSesion:hover {
+  background: rgb(193, 66, 66);
+
+}
+
 .main-content {
   flex: 1;
   padding: 20px;
@@ -61,23 +86,21 @@ body {
 }
 
 .top-bar {
+  width: calc(100% - 280px);
   position: fixed;
-  top: 0;
-  left: 250px;
-  width: calc(100% - 250px);
-  background: #3399cc;
-  color: white;
-  padding: 15px 20px;
-  z-index: 1000;
+  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 10px;
+  margin-bottom: 20px;
+  top: 2px;
+  padding: 20px;
+  background: #3399cc;
+  z-index: 999;
 }
 
 .top-bar h1 {
-  color: #fff;
-  font-size: 1.5rem;
+  color: #000066;
 }
 
 .search-container {

@@ -4,7 +4,9 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
 from ..models import Rotaciones
+
 
 @login_required
 @require_http_methods(["GET"])
@@ -60,7 +62,10 @@ def anadir_rotacion_usuario(request):
 
         if not all([username, fecha, entrada, salida]):
             return JsonResponse({"success": False, "error": "Todos los campos son obligatorios"})
-
+        
+        verificarUserExistEnRotacion = Rotaciones.objects.filter(username=username, fecha=fecha).exists()
+        if(verificarUserExistEnRotacion):
+            return JsonResponse({"success": False, "error": "Ya el usuario tiene un horario asignado en el dia seleccionado si desea cambiarlo elimínelo y agrégelo de nuevo"})
         rotacion = Rotaciones.objects.create(
             username=username,
             fecha=fecha,
@@ -78,4 +83,5 @@ def anadir_rotacion_usuario(request):
             }
         })
     except Exception as e:
+        print(str(e))
         return JsonResponse({"success": False, "error": str(e)}, status=500)

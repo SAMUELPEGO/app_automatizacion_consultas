@@ -101,7 +101,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       alert("Todos los campos son obligatorios");
       return;
     }
-    console.log(nombre, fecha, entrada, salida);
+    if(entrada > salida) {
+       alert("La entrada no puede ser mayor a la salida");
+      return;
+    }
     const formData = new FormData();
     formData.append("nombre", nombre);
     formData.append("fecha", fecha);

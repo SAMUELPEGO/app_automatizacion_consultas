@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 from django.shortcuts import redirect
 from django.urls import reverse
 
@@ -44,3 +44,9 @@ def api_login(request):
             'success': False,
             'error': str(e)
         }, status=500)
+    
+
+@require_http_methods(["GET"])
+def api_logOut(request):
+    logout(request)
+    return redirect("inicio_sesion")

@@ -3,28 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <title>Rotaciones</title>
-    <link
-      rel="stylesheet"
-      href="static/css/guardia_rotaciones_page.css"
-    />
-    <script
-      src="static/js/guardia_rotaciones_page.js"
-      defer
-    ></script>
+    <link rel="stylesheet" href="static/css/guardia_rotaciones_page.css" />
+    <script src="static/js/guardia_rotaciones_page.js" defer></script>
   </head>
   <body>
     <div class="dashboard">
       <aside class="sidebar">
-        <h2>Menu</h2>
+        <img
+          src="/static/imagenes/logo_etecsa.jpg"
+          alt="logo_etecsa"
+          class="logo"
+        />
+
         <ul>
           <li><a href="guardia_page">Procedimientos</a></li>
           <li>
             <a href="guardia_consultas_page">Consultas</a>
           </li>
           <li>
-            <a href="guardia_rotaciones_page" class="selected">Consultas</a>
+            <a href="guardia_rotaciones_page" class="selected">Rotaciones</a>
           </li>
         </ul>
+        <button
+          onclick="window.location.href = 'cerrar_sesion'"
+          class="btn_cerrarSesion"
+        >
+          Cerrar sesión
+        </button>
       </aside>
 
       <main class="main-content">
@@ -36,7 +41,6 @@
             <button class="reload-button" onclick="location.reload()">
               Recargar
             </button>
-            <button id="btnCrearRotacion" class="search-button">Agregar</button>
           </div>
         </header>
 
@@ -49,7 +53,6 @@
                 <th>Fecha</th>
                 <th>Entrada</th>
                 <th>Salida</th>
-                <th>Acciones</th>
               </tr>
             </thead>
             <tbody></tbody>

@@ -27,8 +27,14 @@ body {
     padding: 20px;
 }
 
-.sidebar h2 {
-    margin-bottom: 20px;
+.sidebar .logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  margin-left: 105px;
+  transform: translateX(-50px);
+
+
 }
 
 .sidebar ul {
@@ -43,18 +49,32 @@ body {
 }
 
 .sidebar a {
-    width: 100vw;
     text-decoration: none;
+    color: inherit;
+    display: block;
     padding: 5px;
-
 }
 
-.sidebar a:hover {
-    color: white;
-}
-
+.sidebar a:hover,
 .sidebar a.selected {
     color: white;
+}
+.btn_cerrarSesion {
+  padding: 15px;
+  position: absolute;
+  top: 80vh;
+  right: 0;
+  width: 90%;
+  background: rgb(173, 31, 31);
+  border: none;
+  color: whitesmoke;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  cursor: pointer;
+}
+.btn_cerrarSesion:hover {
+  background: rgb(193, 66, 66);
+
 }
 
 .main-content {
@@ -134,20 +154,22 @@ body {
 .search-button:hover {
     background-color: #0056b3;
 }
+
 .reload-button {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 10px 12px;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .reload-button:hover {
-  background-color: #5a6268;
+    background-color: #5a6268;
 }
+
 .card-section {
     padding-top: 100px;
     display: grid;
