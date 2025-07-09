@@ -10,6 +10,7 @@ urlpatterns = [
        path('especialista_page', views.especialista_page, name='especialista_page'),
        path('especialista_consultas_page', views.especialista_consultas_page, name='especialista_consultas_page'),
        path('especialista_principal_page', views.especialista_principal_page, name='especialista_principal_page'),
+       path('especialista_principal_rotaciones_page', views.especialista_principal_rotaciones_page, name='especialista_principal_rotaciones_page'),
        path('iniciar_sesion', auth.api_login, name='iniciar_sesion'),
        path("crear_usuario",user_repository.crear_usuario,name="crear_usuario"),
        path("eliminar_usuario",user_repository.eliminar_usuario,name="eliminar_usuario"),

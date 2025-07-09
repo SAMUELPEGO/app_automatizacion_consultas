@@ -11,6 +11,14 @@ def especialista_principal_page(request):
         return render(request, "especialista_principal_page.html")
      else:
         return redirect('inicio_sesion')
+     
+@login_required
+def especialista_principal_rotaciones_page(request):
+     print("ok")
+     if request.user.perfil.rol == 'especialista_principal':
+        return render(request, "especialista_principal_rotaciones_page.html")
+     else:
+        return redirect('inicio_sesion')
 
 @login_required
 def especialista_page(request):

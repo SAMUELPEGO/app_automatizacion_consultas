@@ -4,18 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de Usuarios</title>
-    <link rel="stylesheet" href="static/css/especialista_principal_page.css" />
-    <script src="static/js/especialista_principal_page.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="static/css/especialista_principal_rotaciones_page.css"
+    />
+    <script
+      src="static/js/especialista_principal_rotaciones_page.js"
+      defer
+    ></script>
   </head>
   <body>
     <div class="dashboard">
       <aside class="sidebar">
         <h2>Menú</h2>
-           <ul>
+        <ul>
           <li>
-            <a href="especialista_principal_page" class="selected">Gestión de usuarios</a>
+            <a href="especialista_principal_page">Gestión de usuarios</a>
           </li>
-          <li><a href="especialista_principal_rotaciones_page">Consultas</a></li>
+          <li>
+            <a href="especialista_principal_rotaciones_page" class="selected"
+              >Consultas</a
+            >
+          </li>
         </ul>
       </aside>
 
@@ -31,25 +41,11 @@
             />
             <button id="btnBuscar" class="search-button">Buscar</button>
             <button id="btnRecargar" class="reload-button">reiniciar</button>
-
           </div>
           <button id="btnCrearUsuario">Crear Usuario</button>
         </header>
 
-        <section class="table-section">
-          <table id="usuariosTabla">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </section>
+        <!-- ------------------------ -->
       </main>
     </div>
 
