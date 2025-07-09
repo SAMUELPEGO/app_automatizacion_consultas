@@ -160,49 +160,43 @@ def crear_consulta(request):
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
-# @login_required
-# @csrf_exempt
-# @require_http_methods(["POST"])
-# def actualizar_consulta(request):
-#     """Actualiza una consulta existente"""
-#     try:
-#         consulta_id = request.POST.get('consulta_id')
-#         if not consulta_id:
-#             return JsonResponse({'success': False, 'error': 'ID de consulta es requerido.'}, status=400)
+@login_required
+@csrf_exempt
+@require_http_methods(["POST"])
+def actualizar_consulta(request):
+    try:
+        consulta_id = request.POST.get('consulta_id')
+        if not consulta_id:
+            return JsonResponse({'success': False, 'error': 'ID de consulta es requerido.'})
         
-#         consulta = Consulta.objects.get(id=consulta_id)
+        consulta = Consulta.objects.get(id=consulta_id)
         
-#         # Verificar que el usuario actual sea el emisor de la consulta
-#         if consulta.emisor != request.user.username:
-#             return JsonResponse({'success': False, 'error': 'No tienes permisos para actualizar esta consulta.'}, status=403)
+        if consulta.receptor != request.user.username:
+            return JsonResponse({'success': False, 'error': 'No tienes permisos para actualizar esta consulta.'})
         
-#         emisor = request.POST.get('emisor')
-#         receptor = request.POST.get('receptor')
+        respuesta = request.POST.get('respuesta')
+        consulta.respuesta = respuesta
+        consulta.estado = "respondida"
 
-#         if emisor:
-#             consulta.emisor = emisor
-#         if receptor:
-#             consulta.receptor = receptor
+        # Validar que el emisor y receptor no sean el mismo
+        if consulta.emisor == consulta.receptor:
+            return JsonResponse({'success': False, 'error': 'El emisor y receptor no pueden ser el mismo.'})
 
-#         # Validar que el emisor y receptor no sean el mismo
-#         if consulta.emisor == consulta.receptor:
-#             return JsonResponse({'success': False, 'error': 'El emisor y receptor no pueden ser el mismo.'}, status=400)
-
-#         consulta.save()
+        consulta.save()
         
-#         return JsonResponse({
-#             'success': True, 
-#             'message': "Consulta actualizada correctamente",
-#             'consulta': {
-#                 'id': consulta.id,
-#                 'emisor': consulta.emisor,
-#                 'receptor': consulta.receptor,
-#             }
-#         })
-#     except Consulta.DoesNotExist:
-#         return JsonResponse({'success': False, 'error': 'Consulta no encontrada.'}, status=404)
-#     except Exception as e:
-#         return JsonResponse({'success': False, 'error': str(e)}, status=500)
+        return JsonResponse({
+            'success': True, 
+            'message': "Consulta actualizada correctamente",
+            'consulta': {
+                'id': consulta.id,
+                'emisor': consulta.emisor,
+                'receptor': consulta.receptor,
+            }
+        })
+    except Consulta.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Consulta no encontrada.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
 

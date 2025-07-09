@@ -23,6 +23,7 @@ urlpatterns = [
        path("crear_consulta",consultas_repository.crear_consulta,name="crear_consulta"),
        path("obtener_consultas_por_emisor",consultas_repository.obtener_consultas_por_emisor,name="obtener_consultas_por_emisor"),
        path("obtener_consultas_por_receptor",consultas_repository.obtener_consultas_por_receptor,name="obtener_consultas_por_receptor"),
+       path("actualizar_consulta",consultas_repository.actualizar_consulta,name="actualizar_consulta"),
        path("eliminar_consulta",consultas_repository.eliminar_consulta,name="eliminar_consulta"),
 
 

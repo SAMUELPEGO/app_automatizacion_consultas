@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
 
         <div class="acciones">
-          <button class="btn-ver-archivo" onclick="eliminarConsulta('${consulta.id}')">
+          <button class="btn-ver-archivo" onclick="abrirModalConsulta('${consulta.id}')">
             Responder
           </button>
         </div>
@@ -66,19 +66,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  window.verArchivo = (url) => {
-    if (!url || url === '#') {
-      alert('No hay archivo disponible.');
-      return;
-    }
-    window.open(url, '_blank');
-  };
 
-  window.abrirModalConsulta = (nombreEspecialista, procedimiento_id) => {
-    console.log(nombreEspecialista, procedimiento_id);
-    document.getElementById('nombreEspecialistaInput').value = nombreEspecialista;
-    document.getElementById('procedimientoId').value = procedimiento_id;
-    document.getElementById('tituloModalEspecialista').textContent = `Consultar a ${nombreEspecialista}`;
+  window.abrirModalConsulta = (consultaId) => {
+    document.getElementById('consultaIdInput').value = consultaId;
+    
     document.getElementById('modalConsulta').style.display = 'block';
   };
 
@@ -93,7 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const formData = new FormData(e.target);
 
     try {
-      const response = await fetch('/crear_consulta', {
+      const response = await fetch('/actualizar_consulta', {
         method: 'POST',
         body: formData
       });
@@ -101,12 +92,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.log(response);
       console.log(data);
       if (data.success) {
-        alert('consulta creada correctamente');
+        alert('consulta respondida correctamente');
         await renderizarTarjetas();
         modal.style.display = 'none';
         e.target.reset();
       } else {
-        alert(data.error || 'Error al crear consulta');
+        alert(data.error || 'Error al responder consulta');
       }
     } catch (error) {
       console.log(error)
@@ -115,30 +106,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     cerrarModalConsulta();
   };
 
-  window.eliminarConsulta = async (consultaId) => {
-    if (!confirm('¿Estás seguro de que deseas eliminar esta consulta?')) {
-      return;
-    }
-    const formData = new FormData()
-    formData.append('consulta_id', consultaId);
-    try {
-      const response = await fetch(`/eliminar_consulta`, {
-        method: 'POST',
-        body: formData
-      });
-      const data = await response.json();
-      if (data.success) {
-        alert('Consulta eliminada correctamente');
-        await renderizarTarjetas();
-      } else {
-        alert(data.error || 'Error al eliminar la consulta');
-      }
-    } catch (error) {
-      console.error('Error al eliminar la consulta:', error);
-      alert('Ocurrió un error al eliminar la consulta.');
-    }
-
-  }
   document.getElementById('modalCerrarConsulta').addEventListener('click', cerrarModalConsulta);
   document.getElementById('formularioConsulta').addEventListener('submit', enviarConsulta);
 
