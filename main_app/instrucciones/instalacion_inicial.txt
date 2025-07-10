@@ -1,19 +1,19 @@
 
 
-# INSTRUCCIONES INICIALES DE INSTALACION QUE CORRESPONDEN A LAS MIGRACIONES INICIALES Y A LA CREACION DEL PRIMER USUARIO 
+INSTRUCCIONES INICIALES DE INSTALACION QUE CORRESPONDEN A LAS MIGRACIONES INICIALES Y A LA CREACION DEL PRIMER USUARIO 
 
-# asegurate de estar en el entorno virtual de tu proyecto
-# python -m venv env
+Asegurate de estar en el entorno virtual de tu proyecto
+python -m venv env
 
-# instala las dependencias
-# pip install -r requirements.txt
+instala las dependencias
+pip install -r requirements.txt
 
-# Ejecuta los siguientes comandos en la terminal:
-# python manage.py makemigrations main_app
-# python manage.py migrate
-# python manage.py shell
+Ejecuta los siguientes comandos en la terminal:
+python manage.py makemigrations main_app
+python manage.py migrate
+python manage.py shell
 
-# copia el siguiente codigo en la shell de django para crear el primer usuario
+copia el siguiente codigo en la shell de django para crear el primer usuario
 
 from django.db import transaction
 from ..models import Perfil, Usuario
