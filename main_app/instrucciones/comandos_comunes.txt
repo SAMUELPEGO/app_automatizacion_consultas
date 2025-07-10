@@ -1,0 +1,41 @@
+django-admin startproject nombre_del_proyecto
+# Crea un nuevo proyecto Django. Ejecuta este comando en la carpeta donde quieres iniciar el proyecto.
+
+python manage.py startapp nombre_app
+# Crea una nueva aplicación dentro de tu proyecto Django. Úsalo después de haber creado el proyecto.
+
+python manage.py createsuperuser
+# Crea un usuario administrador para acceder al panel de administración de Django.
+
+python manage.py changepassword <nombre_de_usuario>
+# Cambia la contraseña de un usuario existente (reemplaza <nombre_de_usuario> con el nombre deseado).
+
+python manage.py createsuperuser --username admin --email admin@example.com
+# Crea un superusuario con nombre y correo personalizados en un solo comando.
+
+python manage.py runserver
+# Inicia el servidor de desarrollo local. Ideal para ver tu proyecto en el navegador.
+
+python manage.py makemigrations
+# Detecta los cambios en tus modelos y los prepara para aplicarse en la base de datos.
+
+python manage.py migrate
+# Aplica las migraciones creadas a la base de datos.
+
+python manage.py shell
+# Abre una terminal interactiva de Python con el contexto del proyecto (útil para pruebas o manipulación de objetos).
+
+python manage.py collectstatic
+# Copia todos los archivos estáticos (CSS, JS, imágenes) a una carpeta específica para servirlos en producción.
+
+python manage.py test
+# Ejecuta las pruebas unitarias que hayas definido en tu aplicación.
+
+python manage.py showmigrations
+# Muestra todas las migraciones disponibles y si han sido aplicadas o no.
+
+python manage.py dbshell
+# Abre el cliente de base de datos conectado al proyecto (requiere tenerlo instalado en tu sistema).
+
+python manage.py check
+# Revisa la configuración y estructura de tu proyecto en busca de posibles errores.
