@@ -41,4 +41,12 @@ python manage.py check
 # Revisa la configuración y estructura de tu proyecto en busca de posibles errores.
 
 otros
+python -m venv env
+
+python -m pip install Django
+
 pip freeze > requirements.txt
+
+django-admin startproject nombre_del_proyecto
+
+python manage.py startapp nombre_app .

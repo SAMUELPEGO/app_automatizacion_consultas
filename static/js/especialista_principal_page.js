@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const inputBuscar = document.getElementById('inputBuscar');
   const btnBuscar = document.getElementById('btnBuscar');
   const btnRecargar = document.getElementById('btnRecargar');
+  const selectEdit = document.querySelector('.rol-container select');
 
   function recargarPagina() {
     location.reload();
@@ -42,12 +43,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('count-procedimientos').textContent = procData?.procedimientos.length || 0;
     document.getElementById('count-consultas').textContent = consData?.consultas.length || 0;
-    document.getElementById('count-usuarios').textContent = userData?.usuarios.length || 0;
+    document.getElementById('count-usuarios').textContent = userData?.usuarios.length + 1 || 0;
   }
 
   window.onload = loadCounts;
   async function renderizarTabla() {
-    const get_usuarios = await fetch("/obtener_usuarios")
+    const query = new URLSearchParams({ especialista_principal: true });
+    const get_usuarios = await fetch("/obtener_usuarios?" + query.toString());
     const data = await get_usuarios.json()
     if (data.usuarios?.length) {
       if (inputBuscar.value.trim() !== '') {
@@ -63,7 +65,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     data.usuarios.forEach((usuario, index) => {
       const tr = document.createElement('tr');
 
-      tr.innerHTML = `
+      if (usuario.rol === 'especialista_principal') {
+        tr.innerHTML = `
+       <td>${index + 1}</td>
+        <td title="${usuario.id}">${usuario.id.slice(0, 8)}...</td>
+        <td>${usuario.username}</td>
+        <td>${usuario.rol}</td>
+        <td>
+          <button class="btn-editar"  onclick="editarUsuario('${usuario.id}','${true}')">Editar</button>
+        </td>
+      `;
+      }
+      else {
+        tr.innerHTML = `
        <td>${index + 1}</td>
         <td title="${usuario.id}">${usuario.id.slice(0, 8)}...</td>
         <td>${usuario.username}</td>
@@ -73,16 +87,27 @@ document.addEventListener('DOMContentLoaded', async () => {
           <button class="btn-eliminar" onclick="eliminarUsuario('${usuario.id}')">Eliminar</button>
         </td>
       `;
-
+      }
       tabla.appendChild(tr);
     });
   }
 
-  window.editarUsuario = (id) => {
-    modalEditInputNombre.value = '';
-    modalEditInputPassword.value = '';
-    modalEdit.style.display = 'block';
-    modalEdit.setAttribute('data-usuario-id', id);
+  window.editarUsuario = (id, es_especialista = false) => {
+    if (es_especialista) {
+      selectEdit.innerHTML = `<option value="especialista_principal">especialista_principal</option>`
+      modalEditInputNombre.value = '';
+      modalEditInputPassword.value = '';
+      modalEdit.style.display = 'block';
+      modalEdit.setAttribute('data-usuario-id', id);
+    }
+    else {
+      selectEdit.innerHTML = ` <option value="guardia">Guardia</option>
+                               <option value="especialista">Especialista</option>`
+      modalEditInputNombre.value = '';
+      modalEditInputPassword.value = '';
+      modalEdit.style.display = 'block';
+      modalEdit.setAttribute('data-usuario-id', id);
+    }
   };
 
   window.eliminarUsuario = (id) => {
@@ -155,8 +180,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (data.success) {
         alert('Usuario actualizado correctamente');
         await renderizarTabla();
-        modal.style.display = 'none';
-        formulario.reset();
+        modalEdit.style.display = 'none';
+        window.location.reload()
       } else {
         alert(data.error || 'Error al actualizar usuario');
       }
