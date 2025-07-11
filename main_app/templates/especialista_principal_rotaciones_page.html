@@ -15,7 +15,11 @@
   <body>
     <div class="dashboard">
       <aside class="sidebar">
-              <img src="/static/imagenes/logo_etecsa.jpg" alt="logo_etecsa" class="logo">
+        <img
+          src="/static/imagenes/logo_etecsa.jpg"
+          alt="logo_etecsa"
+          class="logo"
+        />
 
         <ul>
           <li>
@@ -27,8 +31,12 @@
             >
           </li>
         </ul>
-        <button onclick="window.location.href = 'cerrar_sesion'" class="btn_cerrarSesion">Cerrar sesión</button>
-
+        <button
+          onclick="window.location.href = 'cerrar_sesion'"
+          class="btn_cerrarSesion"
+        >
+          Cerrar sesión
+        </button>
       </aside>
 
       <main class="main-content">
@@ -50,8 +58,9 @@
               <tr>
                 <th>#</th>
                 <th>Usuario</th>
-                <th>Fecha</th>
+                <th>Fecha_entrada</th>
                 <th>Entrada</th>
+                <th>fecha_salida</th>
                 <th>Salida</th>
                 <th>Acciones</th>
               </tr>
@@ -68,24 +77,35 @@
         <span id="modalCerrar">&times;</span>
         <h3>Agregar Rotación</h3>
         <form id="formularioRotacion">
-          <label
-            >Usuario:
+          <label>
+            Usuario:
             <select id="nombre" required>
               <option value="">Selecciona un usuario</option>
             </select>
           </label>
-          <label
-            >Fecha:
-            <input type="date" id="fecha" required />
-          </label>
-          <label
-            >Hora Entrada:
-            <input type="time" id="entrada" required />
-          </label>
-          <label
-            >Hora Salida:
-            <input type="time" id="salida" required />
-          </label>
+
+          <div class="input-group">
+            <label>
+              Fecha Entrada:
+              <input type="date" id="fechaEntrada" required />
+            </label>
+            <label>
+              Hora Entrada:
+              <input type="time" id="horaEntrada" required />
+            </label>
+          </div>
+
+          <div class="input-group">
+            <label>
+              Fecha Salida:
+              <input type="date" id="fechaSalida" required />
+            </label>
+            <label>
+              Hora Salida:
+              <input type="time" id="horaSalida" required />
+            </label>
+          </div>
+
           <button type="submit">Guardar</button>
         </form>
       </div>

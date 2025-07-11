@@ -67,9 +67,10 @@ class Consulta(models.Model):
 
 class Rotaciones(models.Model):
     username = models.CharField(max_length=150)
-    fecha = models.CharField(max_length=150)
-    entrada = models.CharField(max_length=150)
-    salida = models.CharField(max_length=150)
+    fecha_entrada = models.DateField()
+    entrada = models.CharField(max_length=10)
+    fecha_salida = models.DateField()
+    salida = models.CharField(max_length=10)  
 
     def __str__(self):
-        return self.nombre
+        return f"{self.username} - {self.fecha_entrada} {self.entrada} a {self.fecha_salida} {self.salida}"
