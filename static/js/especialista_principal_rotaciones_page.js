@@ -90,24 +90,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   async function cargarRotaciones() {
-    const fecha = document.getElementById("fechaSelector").value;
-    if (!fecha) return alert("Por favor, seleccione una fecha");
-    fetch(`/obtener_rotaciones_por_fecha?fecha=${fecha}`)
+    const fechaFiltro = document.getElementById("fechaSelector").value;
+    if (!fechaFiltro) return alert("Por favor, seleccione una fecha");
+
+    fetch(`/obtener_rotaciones_por_fecha?fecha=${fechaFiltro}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.rotaciones?.length) {
           tbody.innerHTML = "";
           data.rotaciones.forEach((r, i) => {
+            const mostrarFechaEntrada = r.fecha_entrada === fechaFiltro ? r.fecha_entrada : "—";
+            const mostrarEntrada = r.fecha_entrada === fechaFiltro ? r.entrada : "—";
+
+            const mostrarFechaSalida = r.fecha_salida === fechaFiltro ? r.fecha_salida : "—";
+            const mostrarSalida = r.fecha_salida === fechaFiltro ? r.salida : "—";
+
             const tr = document.createElement("tr");
             tr.innerHTML = `
-              <td>${i + 1}</td>
-              <td>${r.username}</td>
-              <td>${r.fecha_entrada}</td>
-              <td>${r.entrada}</td>
-              <td>${r.fecha_salida}</td>
-              <td>${r.salida}</td>
-              <td><button class="btn-eliminar" onclick="eliminarRotacion('${r.id}')">Eliminar</button></td>
-            `;
+            <td>${i + 1}</td>
+            <td>${r.username}</td>
+            <td>${mostrarFechaEntrada}</td>
+            <td>${mostrarEntrada}</td>
+            <td>${mostrarFechaSalida}</td>
+            <td>${mostrarSalida}</td>
+            <td><button class="btn-eliminar" onclick="eliminarRotacion('${r.id}')">Eliminar</button></td>
+          `;
             tbody.appendChild(tr);
           });
         } else {

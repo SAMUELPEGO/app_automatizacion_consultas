@@ -4,8 +4,9 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+import datetime
+from django.utils import timezone
 from ..models import Rotaciones
-
 
 @login_required
 @require_http_methods(["GET"])
@@ -50,13 +51,6 @@ def eliminar_rotacion_usuario(request):
         return JsonResponse({"success": False, "error": str(e)}, status=500)
     
 
-from django.utils import timezone
-import datetime
-
-from django.utils import timezone
-import datetime
-from django.db.models import Q
-
 @login_required
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -64,16 +58,24 @@ def anadir_rotacion_usuario(request):
     try:
         username = request.POST.get("nombre")
         fecha_entrada = request.POST.get("fecha_entrada")
-        entrada = request.POST.get("entrada")
+        entrada = request.POST.get("entrada")  # formato "HH:MM AM/PM"
         fecha_salida = request.POST.get("fecha_salida")
-        salida = request.POST.get("salida")
+        salida = request.POST.get("salida")     # formato "HH:MM AM/PM"
 
         if not all([username, fecha_entrada, entrada, fecha_salida, salida]):
-            return JsonResponse({"success": False, "error": "Todos los campos son obligatorios"})
+            return JsonResponse({
+                "success": False,
+                "error": "Todos los campos son obligatorios."
+            })
 
-        # Parsear entrada/salida como datetime
-        dt_entrada = datetime.datetime.strptime(f"{fecha_entrada} {entrada}", "%Y-%m-%d %I:%M %p")
-        dt_salida = datetime.datetime.strptime(f"{fecha_salida} {salida}", "%Y-%m-%d %I:%M %p")
+        try:
+            dt_entrada = datetime.datetime.strptime(f"{fecha_entrada} {entrada}", "%Y-%m-%d %I:%M %p")
+            dt_salida = datetime.datetime.strptime(f"{fecha_salida} {salida}", "%Y-%m-%d %I:%M %p")
+        except ValueError as ve:
+            return JsonResponse({
+                "success": False,
+                "error": "Formato de hora o fecha inválido. Use fechas en formato YYYY-MM-DD y horas en AM/PM."
+            })
 
         if dt_salida <= dt_entrada:
             return JsonResponse({
@@ -81,15 +83,14 @@ def anadir_rotacion_usuario(request):
                 "error": "La hora de salida debe ser mayor a la de entrada."
             })
 
-        # Máximo 24 horas
-        if (dt_salida - dt_entrada).total_seconds() > 86400:
+        if (dt_salida - dt_entrada).total_seconds() > 86400:  # Más de 24 horas
             return JsonResponse({
                 "success": False,
                 "error": "La rotación no puede durar más de 24 horas."
             })
 
-        # Verificar solapamiento con otras rotaciones del mismo usuario
-        conflictos = Rotaciones.objects.filter(username=username)
+        # Validar solapamiento con **TODAS LAS ROTACIONES EXISTENTES**, sin importar el usuario
+        conflictos = Rotaciones.objects.all()
 
         for r in conflictos:
             try:
@@ -100,13 +101,15 @@ def anadir_rotacion_usuario(request):
                     f"{r.fecha_salida} {r.salida}", "%Y-%m-%d %I:%M %p"
                 )
             except ValueError:
-                continue
+                continue  # Saltar registros corruptos
 
-            # Lógica de solapamiento: si NO está fuera de rango
-            if not (dt_salida <= r_dt_entrada or dt_entrada >= r_dt_salida):
+            # Condición general de solapamiento
+            if dt_entrada < r_dt_salida and dt_salida > r_dt_entrada:
                 return JsonResponse({
                     "success": False,
-                    "error": f"El usuario ya tiene una rotación programada entre {r.fecha_entrada} {r.entrada} y {r.fecha_salida} {r.salida}. No pueden solaparse."
+                    "error": f"Ya existe una rotación programada entre "
+                             f"{r.fecha_entrada} {r.entrada} y {r.fecha_salida} {r.salida}. "
+                             f"No pueden solaparse con otras rotaciones."
                 })
 
         # Crear rotación si pasa todas las validaciones
