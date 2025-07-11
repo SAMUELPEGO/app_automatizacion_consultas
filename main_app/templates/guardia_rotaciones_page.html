@@ -2,9 +2,15 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>Panel de guardia</title>
-    <link rel="stylesheet" href="static/css/guardia_rotaciones_page.css" />
-    <script src="static/js/guardia_rotaciones_page.js" defer></script>
+    <title>Panel de especialista principal</title>
+    <link
+      rel="stylesheet"
+      href="static/css/guardia_rotaciones_page.css"
+    />
+    <script
+      src="static/js/guardia_rotaciones_page.js"
+      defer
+    ></script>
   </head>
   <body>
     <div class="dashboard">
@@ -16,12 +22,12 @@
         />
 
         <ul>
-          <li><a href="guardia_page">Procedimientos</a></li>
+          <li><a href="guardia_page" class="selected">Procedimientos</a></li>
           <li>
             <a href="guardia_consultas_page">Consultas</a>
           </li>
           <li>
-            <a href="guardia_rotaciones_page" class="selected">Rotaciones</a>
+            <a href="guardia_rotaciones_page">Rotaciones</a>
           </li>
         </ul>
         <button
@@ -34,7 +40,7 @@
 
       <main class="main-content">
         <header class="top-bar">
-          <h1>Panel de guardia</h1>
+          <h1>Especialista principal</h1>
           <div class="search-container">
             <input type="date" id="fechaSelector" />
             <button class="search-button">Buscar</button>
@@ -50,8 +56,9 @@
               <tr>
                 <th>#</th>
                 <th>Usuario</th>
-                <th>Fecha</th>
+                <th>Fecha_entrada</th>
                 <th>Entrada</th>
+                <th>fecha_salida</th>
                 <th>Salida</th>
               </tr>
             </thead>
@@ -61,33 +68,5 @@
       </main>
     </div>
 
-    <!-- Modal Crear -->
-    <div class="modal" id="modalCrear">
-      <div class="modal-content">
-        <span id="modalCerrar">&times;</span>
-        <h3>Agregar Rotación</h3>
-        <form id="formularioRotacion">
-          <label
-            >Usuario:
-            <select id="nombre" required>
-              <option value="">Selecciona un usuario</option>
-            </select>
-          </label>
-          <label
-            >Fecha:
-            <input type="date" id="fecha" required />
-          </label>
-          <label
-            >Hora Entrada:
-            <input type="time" id="entrada" required />
-          </label>
-          <label
-            >Hora Salida:
-            <input type="time" id="salida" required />
-          </label>
-          <button type="submit">Guardar</button>
-        </form>
-      </div>
-    </div>
   </body>
 </html>

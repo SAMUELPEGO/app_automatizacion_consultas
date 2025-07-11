@@ -5,7 +5,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import datetime
-from django.utils import timezone
+from django.db.models import Q
 from ..models import Rotaciones
 
 @login_required
@@ -16,19 +16,15 @@ def obtener_rotaciones_por_fecha(request):
         return JsonResponse({"success": False, "error": "Fecha requerida"})
     
     try:
-        rotaciones = Rotaciones.objects.filter(fecha_entrada=fecha)
-        data = [
-            {
-                "id": r.id,
-                "username": r.username,
-                "fecha_entrada": r.fecha_entrada,
-                "entrada": r.entrada,
-                "fecha_salida": r.fecha_salida,
-                "salida": r.salida
-            }
-            for r in rotaciones
-        ]
-        return JsonResponse({"success": True, "rotaciones": data})
+        rotaciones = Rotaciones.objects.filter(
+            Q(fecha_entrada=fecha) | Q(fecha_salida=fecha)
+        )
+        
+        data = {
+            "success": True,
+            "rotaciones": list(rotaciones.values())
+        }
+        return JsonResponse(data)
     except Exception as e:
         return JsonResponse({"success": False, "error": str(e)})
     

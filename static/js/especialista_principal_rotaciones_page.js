@@ -98,7 +98,38 @@ document.addEventListener("DOMContentLoaded", async () => {
       .then((data) => {
         if (data.success && data.rotaciones?.length) {
           tbody.innerHTML = "";
-          data.rotaciones.forEach((r, i) => {
+
+          // Función para convertir hora AM/PM a minutos desde medianoche
+          function horaToMin(horaStr) {
+            let [time, modifier] = horaStr.split(" ");
+            let [hours, minutes] = time.split(":").map(Number);
+            if (modifier === "PM" && hours < 12) hours += 12;
+            if (modifier === "AM" && hours === 12) hours = 0;
+            return hours * 60 + minutes;
+          }
+
+          // Ordenar: si es del mismo día del filtro → por hora entrada, sino por fecha salida
+          const rotacionesOrdenadas = data.rotaciones.sort((a, b) => {
+            const esAEntradaFiltro = a.fecha_entrada === fechaFiltro;
+            const esBEntradaFiltro = b.fecha_entrada === fechaFiltro;
+
+            const esASalidaFiltro = a.fecha_salida === fechaFiltro;
+            const esBSalidaFiltro = b.fecha_salida === fechaFiltro;
+
+            // Caso 1: ambos son del mismo día de entrada → ordenar por hora entrada
+            if (esAEntradaFiltro && esBEntradaFiltro) {
+              return horaToMin(a.entrada) - horaToMin(b.entrada);
+            }
+            // Caso 2: uno es entrada y otro salida en el filtro → priorizar entrada
+            if (esAEntradaFiltro && !esBEntradaFiltro) return -1;
+            if (!esAEntradaFiltro && esBEntradaFiltro) return 1;
+
+            // Caso 3: ninguno es entrada en el filtro → ordenar por fecha salida
+            return new Date(a.fecha_salida) - new Date(b.fecha_salida);
+          });
+
+          // Mostrar rotaciones ya ordenadas
+          rotacionesOrdenadas.forEach((r, i) => {
             const mostrarFechaEntrada = r.fecha_entrada === fechaFiltro ? r.fecha_entrada : "—";
             const mostrarEntrada = r.fecha_entrada === fechaFiltro ? r.entrada : "—";
 
@@ -107,14 +138,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const tr = document.createElement("tr");
             tr.innerHTML = `
-            <td>${i + 1}</td>
-            <td>${r.username}</td>
-            <td>${mostrarFechaEntrada}</td>
-            <td>${mostrarEntrada}</td>
-            <td>${mostrarFechaSalida}</td>
-            <td>${mostrarSalida}</td>
-            <td><button class="btn-eliminar" onclick="eliminarRotacion('${r.id}')">Eliminar</button></td>
-          `;
+          <td>${i + 1}</td>
+          <td>${r.username}</td>
+          <td>${mostrarFechaEntrada}</td>
+          <td>${mostrarEntrada}</td>
+          <td>${mostrarFechaSalida}</td>
+          <td>${mostrarSalida}</td>
+          <td><button class="btn-eliminar" onclick="eliminarRotacion('${r.id}')">Eliminar</button></td>
+        `;
             tbody.appendChild(tr);
           });
         } else {

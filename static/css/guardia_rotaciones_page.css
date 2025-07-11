@@ -259,3 +259,13 @@ input[type="time"] {
 .modal-content button:hover {
   background-color: #0056b3;
 }
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  flex: 1;
+}
