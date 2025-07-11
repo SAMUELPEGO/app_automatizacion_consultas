@@ -79,43 +79,6 @@ def eliminar_consulta(request):
         return JsonResponse({'success': False, 'error': 'Consulta no encontrada.'})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
-# @login_required
-# @require_http_methods(["GET"])
-# def obtener_consultas_por_receptor(request):
-#     """Obtiene consultas filtradas por receptor (usuario actual)"""
-#     receptor = request.user.username
-#     consultas = Consulta.objects.filter(receptor=receptor)
-#     data = []
-#     for consulta in consultas:
-#         data.append({
-#             "id": consulta.id,
-#             'emisor': consulta.emisor,
-#             'receptor': consulta.receptor,
-#         })
-#     return JsonResponse({'success': True, 'consultas': data})
-
-# @login_required
-# @require_http_methods(["GET"])
-# def obtener_consultas_por_parametro(request):
-#     """Obtiene consultas filtradas por parámetros específicos"""
-#     emisor = request.GET.get('emisor')
-#     receptor = request.GET.get('receptor')
-    
-#     consultas = Consulta.objects.all()
-    
-#     if emisor:
-#         consultas = consultas.filter(emisor=emisor)
-#     if receptor:
-#         consultas = consultas.filter(receptor=receptor)
-    
-#     data = []
-#     for consulta in consultas:
-#         data.append({
-#             "id": consulta.id,
-#             'emisor': consulta.emisor,
-#             'receptor': consulta.receptor,
-#         })
-#     return JsonResponse({'success': True, 'consultas': data})
 
 @login_required
 @csrf_exempt
@@ -129,6 +92,7 @@ def crear_consulta(request):
         
         if not procedimiento_id:
             return JsonResponse({'success': False, 'error': 'El ID del procedimiento es obligatorio.'})
+        
         if not receptor:
             return JsonResponse({'success': False, 'error': 'El receptor es obligatorio.'})
         
@@ -136,6 +100,8 @@ def crear_consulta(request):
 
         if emisor == receptor:
             return JsonResponse({'success': False, 'error': 'El emisor y receptor no pueden ser el mismo.'})
+        if not contenido:
+            return JsonResponse({'success': False, 'error': 'Todos los campos son requeridos'})
 
         with transaction.atomic():
             consulta = Consulta.objects.create(

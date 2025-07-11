@@ -5,7 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 from main_app.models import Procedimiento, Perfil, Consulta
 from django.db import transaction
 from django.conf import settings
-import os 
+import os
+from django.db import transaction
 
 @login_required
 @require_http_methods(["GET"])
@@ -48,8 +49,8 @@ def crear_procedimiento(request):
         rol = request.POST.get('rol')
         archivo = request.FILES.get('archivo')
 
-        if not all([nombre, rol]):
-            return JsonResponse({'success': False, 'error': 'Faltan datos obligatorios (nombre y rol).'}, status=400)
+        if not all([nombre, rol, descripcion, archivo]):
+            return JsonResponse({'success': False, 'error': 'Faltan datos y todos son obligatorios'}, status=400)
 
         with transaction.atomic():
             
@@ -69,6 +70,9 @@ def crear_procedimiento(request):
 @login_required
 @csrf_exempt
 @require_http_methods(["POST"])
+@login_required
+@csrf_exempt
+@require_http_methods(["POST"])
 def actualizar_procedimiento(request):
     try:
         procedimiento_id = request.POST.get('procedimiento_id')
@@ -76,39 +80,46 @@ def actualizar_procedimiento(request):
             return JsonResponse({'success': False, 'error': 'ID de procedimiento es requerido.'}, status=400)
         
         procedimiento = Procedimiento.objects.get(id=procedimiento_id)
-        nombre = request.POST.get('username')
+        procedimiento_nombre = request.POST.get('username')
         descripcion = request.POST.get('descripcion')
         rol = request.POST.get('rol')
         archivo = request.FILES.get('archivo')
-
-        if nombre:
-            procedimiento.nombre = nombre
-        if descripcion is not None: 
-            procedimiento.descripcion = descripcion
-        if rol:
-            if procedimiento.perfil:
-                procedimiento.perfil.rol = rol
-                procedimiento.perfil.save()
-            else:
-                procedimiento.perfil = Perfil.objects.create(rol=rol)
-
-        if archivo:
-            if procedimiento.archivo:
-                archivo_anterior_path = procedimiento.archivo.path
-                if os.path.exists(archivo_anterior_path):
-                    os.remove(archivo_anterior_path)
-            procedimiento.archivo = archivo
-
-        procedimiento.save()
+        
+        with transaction.atomic():
+            if procedimiento_nombre:
+                procedimiento.nombre = procedimiento_nombre
+            
+            if descripcion is not None:
+                procedimiento.descripcion = descripcion
+            
+            if rol:
+                if procedimiento.perfil:
+                    procedimiento.perfil.rol = rol
+                    procedimiento.perfil.save()
+                else:
+                    procedimiento.perfil = Perfil.objects.create(rol=rol)
+            
+            if archivo:
+                if procedimiento.archivo:
+                    archivo_anterior_path = procedimiento.archivo.path
+                    if os.path.exists(archivo_anterior_path):
+                        os.remove(archivo_anterior_path)
+                procedimiento.archivo = archivo
+            
+            procedimiento.save()
+            
+            if procedimiento_nombre:
+                consultas_con_procedimiento = Consulta.objects.filter(
+                    procedimiento_id=procedimiento_id
+                )
+                consultas_con_procedimiento.update(procedimiento_nombre=procedimiento_nombre)
         
         return JsonResponse({'success': True, 'message': "Procedimiento actualizado correctamente"})
+    
     except Procedimiento.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Procedimiento no encontrado.'}, status=404)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
-
-import os
-from django.db import transaction
 
 @login_required
 @csrf_exempt
@@ -120,7 +131,6 @@ def eliminar_procedimiento(request):
             return JsonResponse({'success': False, 'error': 'ID de procedimiento es requerido.'}, status=400)
         
         with transaction.atomic():
-            # Obtener el procedimiento antes de eliminarlo para acceder al archivo
             procedimiento = Procedimiento.objects.get(id=procedimiento_id)
             
             if procedimiento.archivo:

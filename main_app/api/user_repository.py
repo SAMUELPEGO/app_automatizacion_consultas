@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from main_app.models import Usuario, Perfil
+from main_app.models import Usuario, Perfil, Procedimiento, Consulta
 from django.db import transaction
 
 @login_required
@@ -58,23 +58,48 @@ def actualizar_usuario(request):
         usuario_id = request.POST.get('usuario_id')
         if not usuario_id:
             return JsonResponse({'success': False, 'error': 'ID de usuario es requerido.'}, status=400)
+        
         usuario = Usuario.objects.get(id=usuario_id)
         username = request.POST.get('username')
         password = request.POST.get('password')
-        rol = request.POST.get('rol')
-        if username:
-            usuario.username = username
-        if password:
-            usuario.set_password(password)
-        if rol:
+        
+       
+        username_anterior = usuario.perfil.username if usuario.perfil else None
+        
+        with transaction.atomic():
+            if username:
+                usuario.username = username
+            if password:
+                usuario.set_password(password)
+            
             if usuario.perfil:
-                usuario.perfil.rol = rol
+                if username:
+                    usuario.perfil.username = username
                 usuario.perfil.save()
-            else:
-                usuario.perfil = Perfil.objects.create(rol=rol)
-        usuario.save()
-
+            
+            usuario.save()
+            
+            if username and username_anterior != username:
+                procedimientos_a_actualizar = Procedimiento.objects.filter(
+                    perfil__username=username_anterior
+                )
+                
+                for procedimiento in procedimientos_a_actualizar:
+                    if procedimiento.perfil:
+                        procedimiento.perfil.username = username
+                        procedimiento.perfil.save()
+                
+                consultas_emisor = Consulta.objects.filter(
+                    emisor=username_anterior
+                )
+                consultas_emisor.update(emisor=username)
+                
+                consultas_receptor = Consulta.objects.filter(
+                    receptor=username_anterior
+                )
+                consultas_receptor.update(receptor=username)
         return JsonResponse({'success': True})
+        
     except Usuario.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Usuario no encontrado.'}, status=404)
     except Exception as e:

@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td>${usuario.username}</td>
         <td>${usuario.rol}</td>
         <td>
-          <button class="btn-editar"  onclick="editarUsuario('${usuario.id}','${true}')">Editar</button>
+          <button class="btn-editar"  onclick="editarUsuario('${usuario.id}')">Editar</button>
         </td>
       `;
       }
@@ -92,23 +92,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  window.editarUsuario = (id, es_especialista = false) => {
-    if (es_especialista) {
-      selectEdit.innerHTML = `<option value="especialista_principal">especialista_principal</option>`
-      modalEditInputNombre.value = '';
-      modalEditInputPassword.value = '';
-      modalEdit.style.display = 'block';
-      modalEdit.setAttribute('data-usuario-id', id);
-    }
-    else {
-      selectEdit.innerHTML = ` <option value="guardia">Guardia</option>
-                               <option value="especialista">Especialista</option>`
-      modalEditInputNombre.value = '';
-      modalEditInputPassword.value = '';
-      modalEdit.style.display = 'block';
-      modalEdit.setAttribute('data-usuario-id', id);
-    }
-  };
+  window.editarUsuario = (id) => {
+    modalEditInputNombre.value = '';
+    modalEditInputPassword.value = '';
+    modalEdit.style.display = 'block';
+    modalEdit.setAttribute('data-usuario-id', id);
+  }
 
   window.eliminarUsuario = (id) => {
     if (confirm('¿Estás seguro de eliminar este usuario?')) {
